@@ -4,15 +4,15 @@ node('node') {
   }
 
   stage('Compile'){
-    sh './gradlew compileJava --console'
+    sh './gradlew compileJava'
   }
 
   stage('Test'){
-    sh './gradlew test --console'
+    sh './gradlew test'
   }
 
   stage('Packaging'){
-    sh './gradlew build --console'
+    sh './gradlew build'
   }
 
   stage('Archive'){
