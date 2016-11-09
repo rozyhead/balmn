@@ -13,6 +13,7 @@ node('node') {
 
   stage('Test'){
     sh './gradlew --daemon test'
+    junit 'build/test-results/*.xml'
   }
 
   stage('Packaging'){
