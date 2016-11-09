@@ -4,7 +4,11 @@ node('node') {
   }
 
   stage('Compile'){
-    sh './gradlew --daemon compileJava'
+    sh './gradlew --daemon classes'
+  }
+
+  stage('Compile tests'){
+    sh './gradlew --daemon testClasses'
   }
 
   stage('Test'){
