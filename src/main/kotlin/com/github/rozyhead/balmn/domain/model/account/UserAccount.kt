@@ -5,4 +5,10 @@ import com.github.rozyhead.balmn.domain.model.account.AccountName
 
 data class UserAccount(
     override val accountName: AccountName
-) : Account
+) : Account {
+
+  override fun creatableBoardByUser(accountName: AccountName): Boolean {
+    return accountName == this.accountName
+  }
+
+}
