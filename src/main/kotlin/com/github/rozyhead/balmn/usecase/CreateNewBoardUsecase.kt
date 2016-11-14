@@ -15,7 +15,7 @@ interface CreateNewBoardUsecase {
   @Throws(
       AccountNotFoundException::class,
       NotAuthorizedException::class,
-      BoardIdentifierAlreadyExistsException::class
+      BoardAlreadyExistsException::class
   )
   fun execute(command: Command)
 

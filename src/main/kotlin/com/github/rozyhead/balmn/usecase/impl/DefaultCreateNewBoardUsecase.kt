@@ -4,7 +4,7 @@ import com.github.rozyhead.balmn.domain.model.account.AccountRepository
 import com.github.rozyhead.balmn.domain.model.board.Board
 import com.github.rozyhead.balmn.domain.model.board.BoardRepository
 import com.github.rozyhead.balmn.usecase.AccountNotFoundException
-import com.github.rozyhead.balmn.usecase.BoardIdentifierAlreadyExistsException
+import com.github.rozyhead.balmn.usecase.BoardAlreadyExistsException
 import com.github.rozyhead.balmn.usecase.CreateNewBoardUsecase
 import com.github.rozyhead.balmn.usecase.NotAuthorizedException
 import org.springframework.stereotype.Service
@@ -27,7 +27,7 @@ open class DefaultCreateNewBoardUsecase(
     }
 
     if (boardRepository.exists(boardIdentifier)) {
-      throw BoardIdentifierAlreadyExistsException(boardIdentifier)
+      throw BoardAlreadyExistsException(boardIdentifier)
     }
 
     val board = Board(boardIdentifier)
