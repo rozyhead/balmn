@@ -5,8 +5,8 @@ import com.github.rozyhead.balmn.domain.model.account.UserAccount
 import com.github.rozyhead.balmn.domain.model.account.UserAccountRepository
 import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthentication
 import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthenticationRepository
-import com.github.rozyhead.balmn.usecase.AccountNameAlreadyUsedException
 import com.github.rozyhead.balmn.usecase.RegisterUserAccountUsecase
+import com.github.rozyhead.balmn.usecase.UserRegistrationException.AccountNameAlreadyUsedException
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,17 +17,16 @@ open class DefaultRegisterUserAccountUsecase(
 ) : RegisterUserAccountUsecase {
 
   override fun execute(command: RegisterUserAccountUsecase.Command) {
-    val accountName = command.accountName
+    val (accountName, plainPassword) = command
     if (accountRepository.exists(accountName)) {
       throw AccountNameAlreadyUsedException(accountName)
     }
 
-    val userAccount = UserAccount(accountName)
-    userAccountRepository.save(userAccount)
+    val (userAccount, userAccountEvent) = UserAccount.create(accountName)
+    userAccountRepository.save(userAccount.accountName, listOf(userAccountEvent), emptyList())
 
-    val encodedPassword = command.plainPassword.encode()
-    val passwordAuthentication = PasswordAuthentication(accountName, encodedPassword)
-    passwordAuthenticationRepository.save(passwordAuthentication)
+    val (passwordAuthentication, passwordAuthenticationEvent) = PasswordAuthentication.create(accountName, plainPassword)
+    passwordAuthenticationRepository.save(passwordAuthentication.accountName, listOf(passwordAuthenticationEvent), emptyList())
   }
 
 }

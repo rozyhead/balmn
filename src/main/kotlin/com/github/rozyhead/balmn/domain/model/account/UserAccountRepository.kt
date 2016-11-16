@@ -5,8 +5,8 @@ package com.github.rozyhead.balmn.domain.model.account
  */
 interface UserAccountRepository {
 
-  fun findByAccountName(accountName: AccountName): UserAccount?
+  fun findByAccountName(accountName: AccountName): Pair<UserAccount, List<UserAccountEvent>>?
 
-  fun save(userAccount: UserAccount)
+  fun save(accountName: AccountName, events: List<UserAccountEvent>, oldEvents: List<UserAccountEvent>)
 
 }

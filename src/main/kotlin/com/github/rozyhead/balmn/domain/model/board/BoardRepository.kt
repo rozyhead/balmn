@@ -4,6 +4,6 @@ interface BoardRepository {
 
   fun exists(boardIdentifier: BoardIdentifier): Boolean
 
-  fun save(board: Board)
+  fun save(boardIdentifier: BoardIdentifier, events: List<BoardEvent>, oldEvents: List<BoardEvent>)
 
 }

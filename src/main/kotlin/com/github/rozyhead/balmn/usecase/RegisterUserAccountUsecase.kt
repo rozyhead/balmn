@@ -15,8 +15,11 @@ interface RegisterUserAccountUsecase {
   )
 
   @Transactional
-  @Throws(AccountNameAlreadyUsedException::class)
+  @Throws(UserRegistrationException::class)
   fun execute(command: Command)
 
 }
 
+sealed class UserRegistrationException(message: String) : Exception(message) {
+  class AccountNameAlreadyUsedException(accountName: AccountName) : UserRegistrationException(accountName.value)
+}

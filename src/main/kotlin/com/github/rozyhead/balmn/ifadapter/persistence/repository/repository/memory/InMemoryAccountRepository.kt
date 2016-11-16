@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.ifadapter.repository.memory
+package com.github.rozyhead.balmn.ifadapter.persistence.repository.repository.memory
 
 import com.github.rozyhead.balmn.domain.model.account.Account
 import com.github.rozyhead.balmn.domain.model.account.AccountName
@@ -15,7 +15,7 @@ open class InMemoryAccountRepository(
   }
 
   override fun findByAccountName(accountName: AccountName): Account? {
-    return inMemoryUserAccountRepository.findByAccountName(accountName)
+    return inMemoryUserAccountRepository.findByAccountName(accountName)?.first
   }
 
 }

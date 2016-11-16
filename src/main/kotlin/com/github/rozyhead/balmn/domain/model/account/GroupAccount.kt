@@ -5,7 +5,7 @@ data class GroupAccount(
     val members: GroupMembers
 ) : Account {
 
-  override fun creatableBoardByUser(accountName: AccountName): Boolean {
+  override fun allowBoardCreationForUser(accountName: AccountName): Boolean {
     throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 

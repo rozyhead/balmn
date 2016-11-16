@@ -4,9 +4,9 @@ import com.github.rozyhead.balmn.domain.model.account.AccountName
 
 interface PasswordAuthenticationRepository {
 
-  fun findByAccountName(accountName: AccountName): PasswordAuthentication?
+  fun findByAccountName(accountName: AccountName): Pair<PasswordAuthentication, List<PasswordAuthenticationEvent>>?
 
-  fun save(passwordAuthentication: PasswordAuthentication)
+  fun save(accountName: AccountName, events: List<PasswordAuthenticationEvent>, oldEvents: List<PasswordAuthenticationEvent>)
 
 }
 
