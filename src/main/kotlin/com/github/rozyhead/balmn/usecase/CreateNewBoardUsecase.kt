@@ -1,7 +1,7 @@
 package com.github.rozyhead.balmn.usecase
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.account.UserAccount
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.BoardIdentifier
 import org.springframework.transaction.annotation.Transactional
 

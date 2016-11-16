@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.domain.model.authentication
+package com.github.rozyhead.balmn.domain.model.authentication.password
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.util.ddd.DomainEvent

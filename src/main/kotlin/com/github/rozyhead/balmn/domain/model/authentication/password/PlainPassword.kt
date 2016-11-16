@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.domain.model.authentication
+package com.github.rozyhead.balmn.domain.model.authentication.password
 
 data class PlainPassword(val value: String) {
 

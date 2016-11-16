@@ -1,7 +1,7 @@
 package com.github.rozyhead.balmn.usecase
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.authentication.PlainPassword
+import com.github.rozyhead.balmn.domain.model.authentication.password.PlainPassword
 import org.springframework.transaction.annotation.Transactional
 
 /**

@@ -1,9 +1,9 @@
 package com.github.rozyhead.balmn.ifadapter.persistence.repository.repository.memory
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthentication
-import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthenticationEvent
-import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthenticationRepository
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthentication
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationEvent
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationRepository
 import org.springframework.stereotype.Repository
 
 @Repository

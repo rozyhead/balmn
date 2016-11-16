@@ -1,4 +1,6 @@
-package com.github.rozyhead.balmn.domain.model.account
+package com.github.rozyhead.balmn.domain.model.account.user
+
+import com.github.rozyhead.balmn.domain.model.account.AccountName
 
 /**
  * @author takeshi

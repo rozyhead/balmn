@@ -1,9 +1,9 @@
 package com.github.rozyhead.balmn.ifadapter.persistence.repository.repository.memory
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.account.UserAccount
-import com.github.rozyhead.balmn.domain.model.account.UserAccountEvent
-import com.github.rozyhead.balmn.domain.model.account.UserAccountRepository
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccountEvent
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccountRepository
 import org.springframework.stereotype.Repository
 
 @Repository

@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.domain.model.board
+package com.github.rozyhead.balmn.domain.model.board.card
 
 import java.util.*
 

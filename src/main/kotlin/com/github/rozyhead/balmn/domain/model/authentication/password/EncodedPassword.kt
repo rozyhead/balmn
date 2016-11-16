@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.domain.model.authentication
+package com.github.rozyhead.balmn.domain.model.authentication.password
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 

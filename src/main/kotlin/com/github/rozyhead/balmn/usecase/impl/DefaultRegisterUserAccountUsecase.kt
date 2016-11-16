@@ -1,10 +1,10 @@
 package com.github.rozyhead.balmn.usecase.impl
 
 import com.github.rozyhead.balmn.domain.model.account.AccountRepository
-import com.github.rozyhead.balmn.domain.model.account.UserAccount
-import com.github.rozyhead.balmn.domain.model.account.UserAccountRepository
-import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthentication
-import com.github.rozyhead.balmn.domain.model.authentication.PasswordAuthenticationRepository
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccountRepository
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthentication
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationRepository
 import com.github.rozyhead.balmn.usecase.RegisterUserAccountUsecase
 import com.github.rozyhead.balmn.usecase.UserRegistrationException.AccountNameAlreadyUsedException
 import org.springframework.stereotype.Service
