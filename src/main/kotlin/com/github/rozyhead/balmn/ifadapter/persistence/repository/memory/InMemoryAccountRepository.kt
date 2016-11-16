@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.ifadapter.persistence.repository.repository.memory
+package com.github.rozyhead.balmn.ifadapter.persistence.repository.memory
 
 import com.github.rozyhead.balmn.domain.model.account.Account
 import com.github.rozyhead.balmn.domain.model.account.AccountName
