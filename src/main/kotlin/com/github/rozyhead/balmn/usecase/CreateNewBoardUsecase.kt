@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 interface CreateNewBoardUsecase {
 
   data class Command(
-      val userAccount: UserAccount,
-      val boardIdentifier: BoardIdentifier
+      val boardIdentifier: BoardIdentifier,
+      val occurredBy: UserAccount
   )
 
   @Transactional

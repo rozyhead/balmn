@@ -10,17 +10,17 @@ data class Board(
 ) : DomainEntity<BoardEvent, Board> {
 
   companion object {
-    fun create(boardIdentifier: BoardIdentifier, createdBy: AccountName): Pair<Board, BoardCreated> {
-      return Board() and BoardCreated(boardIdentifier, createdBy)
+    fun create(boardIdentifier: BoardIdentifier, occurredBy: AccountName): Pair<Board, BoardCreated> {
+      return Board() and BoardCreated(boardIdentifier, occurredBy = occurredBy)
     }
   }
 
   val owner: AccountName = identifier.accountName
   val name: BoardName = identifier.boardName
 
-  fun addSheet(sheetIdentifier: SheetIdentifier, addedBy: AccountName): Pair<Board, SheetAdded> {
+  fun addSheet(sheetIdentifier: SheetIdentifier, occurredBy: AccountName): Pair<Board, SheetAdded> {
     require(!sheets.contains(sheetIdentifier))
-    return this and SheetAdded(identifier, sheetIdentifier, addedBy)
+    return this and SheetAdded(identifier, sheetIdentifier, occurredBy = occurredBy)
   }
 
   override fun <E> apply(event: E): Board = when (event) {
