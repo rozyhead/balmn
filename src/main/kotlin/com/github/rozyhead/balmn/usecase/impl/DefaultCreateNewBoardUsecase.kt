@@ -14,21 +14,21 @@ open class DefaultCreateNewBoardUsecase(
 ) : CreateNewBoardUsecase {
 
   override fun execute(command: CreateNewBoardUsecase.Command) {
-    val (boardIdentifier, occurredBy) = command
+    val (boardIdentifier, boardName, operator) = command
     val ownerAccountName = boardIdentifier.accountName
 
     val ownerAccount = accountRepository.findByAccountName(ownerAccountName)
         ?: throw OwnerAccountNotFoundException(ownerAccountName)
 
-    if (!ownerAccount.allowBoardCreationForUser(occurredBy.accountName)) {
-      throw NotAuthorizedException(ownerAccountName, occurredBy.accountName)
+    if (!ownerAccount.allowBoardCreationForUser(operator.accountName)) {
+      throw NotAuthorizedException(ownerAccountName, operator.accountName)
     }
 
     if (boardRepository.exists(boardIdentifier)) {
       throw BoardAlreadyExistsException(boardIdentifier)
     }
 
-    val (board, event) = Board.create(boardIdentifier, occurredBy.accountName)
+    val (board, event) = Board.create(boardIdentifier, boardName, operator.accountName)
     boardRepository.save(board.identifier, listOf(event), emptyList())
   }
 

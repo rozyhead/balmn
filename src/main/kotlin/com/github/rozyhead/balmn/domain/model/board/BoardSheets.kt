@@ -9,7 +9,7 @@ data class BoardSheets(
   fun contains(sheetIdentifier: SheetIdentifier): Boolean = sheetIdentifiers.contains(sheetIdentifier)
 
   fun addSheet(sheetIdentifier: SheetIdentifier): BoardSheets {
-    require(!sheetIdentifiers.contains(sheetIdentifier))
+    require(!contains(sheetIdentifier))
     return copy(sheetIdentifiers = sheetIdentifiers + sheetIdentifier)
   }
 }

@@ -1,7 +1,7 @@
 package com.github.rozyhead.balmn.domain.model.board.sheet
 
-/**
- * @author takeshi
- */
 interface SheetRepository {
+
+  fun save(sheetIdentifier: SheetIdentifier, events: List<SheetEvent>, oldEvents: List<SheetEvent>)
+
 }

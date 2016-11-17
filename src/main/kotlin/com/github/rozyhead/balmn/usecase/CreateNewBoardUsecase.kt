@@ -3,13 +3,15 @@ package com.github.rozyhead.balmn.usecase
 import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.BoardIdentifier
+import com.github.rozyhead.balmn.domain.model.board.BoardName
 import org.springframework.transaction.annotation.Transactional
 
 interface CreateNewBoardUsecase {
 
   data class Command(
       val boardIdentifier: BoardIdentifier,
-      val occurredBy: UserAccount
+      val boardName: BoardName,
+      val operator: UserAccount
   )
 
   @Transactional

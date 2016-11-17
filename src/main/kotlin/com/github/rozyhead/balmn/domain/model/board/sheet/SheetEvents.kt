@@ -1,24 +1,24 @@
-package com.github.rozyhead.balmn.domain.model.board
+package com.github.rozyhead.balmn.domain.model.board.sheet
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.board.sheet.SheetIdentifier
+import com.github.rozyhead.balmn.domain.model.board.card.CardIdentifier
 import com.github.rozyhead.balmn.util.ddd.DomainEvent
 import java.time.LocalDateTime
 
-interface BoardEvent : DomainEvent {
+interface SheetEvent : DomainEvent {
   val occurredBy: AccountName
 }
 
-data class BoardCreated(
-    val boardIdentifier: BoardIdentifier,
-    val boardName: BoardName,
-    override val occurredOn: LocalDateTime = LocalDateTime.now(),
-    override val occurredBy: AccountName
-) : BoardEvent
-
-data class SheetAdded(
-    val boardIdentifier: BoardIdentifier,
+data class SheetCreated(
     val sheetIdentifier: SheetIdentifier,
+    val sheetName: SheetName,
     override val occurredOn: LocalDateTime = LocalDateTime.now(),
     override val occurredBy: AccountName
-) : BoardEvent
+) : SheetEvent
+
+data class CardAdded(
+    val sheetIdentifier: SheetIdentifier,
+    var cardIdentifier: CardIdentifier,
+    override val occurredOn: LocalDateTime = LocalDateTime.now(),
+    override val occurredBy: AccountName
+) : SheetEvent
