@@ -1,13 +1,22 @@
 package com.github.rozyhead.balmn.usecase
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
+import com.github.rozyhead.balmn.domain.model.account.AccountRepository
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccountRepository
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthentication
+import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationRepository
 import com.github.rozyhead.balmn.domain.model.authentication.password.PlainPassword
+import com.github.rozyhead.balmn.usecase.exception.AccountOperationException
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-/**
- * ユーザー登録Usecase
- */
-interface RegisterUserAccountUsecase {
+@Service
+open class RegisterUserAccountUsecase(
+    val accountRepository: AccountRepository,
+    val userAccountRepository: UserAccountRepository,
+    val passwordAuthenticationRepository: PasswordAuthenticationRepository
+) {
 
   data class Command(
       val accountName: AccountName,
@@ -15,11 +24,19 @@ interface RegisterUserAccountUsecase {
   )
 
   @Transactional
-  @Throws(UserRegistrationException::class)
-  fun execute(command: Command)
+  @Throws(AccountOperationException::class)
+  fun execute(command: Command) {
+    val (accountName, plainPassword) = command
+    if (accountRepository.exists(accountName)) {
+      throw AccountOperationException.accountNameAlreadyUsed(accountName)
+    }
+
+    val (userAccount, userAccountEvent) = UserAccount.create(accountName)
+    userAccountRepository.save(userAccount.accountName, listOf(userAccountEvent), emptyList())
+
+    val (passwordAuthentication, passwordAuthenticationEvent) = PasswordAuthentication.create(accountName, plainPassword)
+    passwordAuthenticationRepository.save(passwordAuthentication.accountName, listOf(passwordAuthenticationEvent), emptyList())
+  }
 
 }
 
-sealed class UserRegistrationException(message: String) : Exception(message) {
-  class AccountNameAlreadyUsedException(accountName: AccountName) : UserRegistrationException(accountName.value)
-}

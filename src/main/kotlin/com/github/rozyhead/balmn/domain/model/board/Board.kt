@@ -1,6 +1,7 @@
 package com.github.rozyhead.balmn.domain.model.board
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
+import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetIdentifier
 import com.github.rozyhead.balmn.util.ddd.DomainEntity
 
@@ -18,6 +19,11 @@ data class Board(
 
   val owner: AccountName = identifier.accountName
   val name: BoardName = identifier.boardName
+
+  fun allowSheetAdditionForUser(userAccount: UserAccount): Boolean {
+    // TODO
+    return true
+  }
 
   fun addSheet(sheetIdentifier: SheetIdentifier, occurredBy: AccountName): Pair<Board, SheetAdded> {
     require(!sheets.contains(sheetIdentifier))

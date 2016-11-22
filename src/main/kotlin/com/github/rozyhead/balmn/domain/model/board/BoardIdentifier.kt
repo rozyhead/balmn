@@ -5,4 +5,10 @@ import com.github.rozyhead.balmn.domain.model.account.AccountName
 data class BoardIdentifier(
     val accountName: AccountName,
     val boardName: BoardName
-)
+) {
+
+  override fun toString(): String {
+    return "${accountName.value}/${boardName.value}"
+  }
+
+}

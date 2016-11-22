@@ -6,14 +6,14 @@ import com.github.rozyhead.balmn.util.ddd.DomainEntity
 import java.util.*
 
 data class Sheet(
-    val identifier: SheetIdentifier = SheetIdentifier(UUID.randomUUID()),
+    val identifier: SheetIdentifier = SheetIdentifier.generate(),
     val name: SheetName = SheetName(""),
     val cards: SheetCards = SheetCards()
 ) : DomainEntity<SheetEvent, Sheet> {
 
   companion object {
-    fun create(sheetIdentifier: SheetIdentifier, sheetName: SheetName, occurredBy: AccountName): Pair<Sheet, SheetCreated> {
-      return Sheet() and SheetCreated(sheetIdentifier, sheetName, occurredBy = occurredBy)
+    fun create(sheetName: SheetName, occurredBy: AccountName): Pair<Sheet, SheetCreated> {
+      return Sheet() and SheetCreated(SheetIdentifier.generate(), sheetName, occurredBy = occurredBy)
     }
   }
 
