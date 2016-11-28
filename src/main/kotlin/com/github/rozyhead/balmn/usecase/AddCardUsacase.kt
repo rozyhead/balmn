@@ -34,7 +34,7 @@ open class AddCardUsacase(
     val boardWithEvents = boardRepository.findByIdentifier(boardIdentifier)
         ?: throw BoardOperationException.boardNotFound(boardIdentifier)
 
-    val (board, oldBoardEvents) = boardWithEvents
+    val (board) = boardWithEvents
     if (!board.allowCardAdditionByUser(requestedBy)) {
       throw BoardOperationException.cardAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
     }
