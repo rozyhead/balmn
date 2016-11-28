@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class AddSheetToBoardUsecase(
+open class AddSheetUsecase(
     val boardRepository: BoardRepository,
     val sheetRepository: SheetRepository
 ) {
