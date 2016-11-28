@@ -31,7 +31,7 @@ open class AddSheetUsecase(
         ?: throw BoardOperationException.boardNotFound(boardIdentifier)
 
     val (board, oldBoardEvents) = boardWithEvents
-    if (!board.allowSheetAdditionForUser(requestedBy)) {
+    if (!board.allowSheetAdditionByUser(requestedBy)) {
       throw BoardOperationException.sheetAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
     }
 

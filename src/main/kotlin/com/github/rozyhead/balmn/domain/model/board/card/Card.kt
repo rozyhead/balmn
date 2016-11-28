@@ -5,13 +5,13 @@ import com.github.rozyhead.balmn.util.ddd.DomainEntity
 import java.util.*
 
 data class Card(
-    val identifier: CardIdentifier = CardIdentifier(UUID.randomUUID()),
+    val identifier: CardIdentifier = CardIdentifier.generate(),
     val title: CardTitle = CardTitle("")
 ) : DomainEntity<CardEvent, Card> {
 
   companion object {
-    fun create(cardIdentifier: CardIdentifier, cardTitle: CardTitle, occurredBy: AccountName): Pair<Card, CardCreated> {
-      return Card() and CardCreated(cardIdentifier, cardTitle, occurredBy = occurredBy)
+    fun create(cardTitle: CardTitle, occurredBy: AccountName): Pair<Card, CardCreated> {
+      return Card() and CardCreated(CardIdentifier.generate(), cardTitle, occurredBy = occurredBy)
     }
   }
 

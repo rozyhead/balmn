@@ -20,9 +20,18 @@ data class Board(
   val owner: AccountName = identifier.accountName
   val name: BoardName = identifier.boardName
 
-  fun allowSheetAdditionForUser(userAccount: UserAccount): Boolean {
+  fun allowSheetAdditionByUser(userAccount: UserAccount): Boolean {
     // TODO
     return true
+  }
+
+  fun allowCardAdditionByUser(userAccount: UserAccount): Boolean {
+    // TODO
+    return true
+  }
+
+  fun hasSheet(sheetIdentifier: SheetIdentifier): Boolean {
+    return sheets.contains(sheetIdentifier)
   }
 
   fun addSheet(sheetIdentifier: SheetIdentifier, occurredBy: AccountName): Pair<Board, SheetAdded> {

@@ -6,9 +6,7 @@ data class SheetIdentifier(val uuid: UUID) {
 
   companion object {
 
-    fun generate(): SheetIdentifier {
-      return SheetIdentifier(UUID.randomUUID())
-    }
+    fun generate(): SheetIdentifier = SheetIdentifier(UUID.randomUUID())
 
   }
 
