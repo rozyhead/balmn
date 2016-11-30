@@ -17,6 +17,10 @@ data class Sheet(
     }
   }
 
+  fun hasCard(cardIdentifier: CardIdentifier): Boolean {
+    return cards.contains(cardIdentifier)
+  }
+
   fun addCard(cardIdentifier: CardIdentifier, occurredBy: AccountName): Pair<Sheet, CardAdded> {
     require(!cards.contains(cardIdentifier))
     return this and CardAdded(identifier, cardIdentifier, occurredBy = occurredBy)

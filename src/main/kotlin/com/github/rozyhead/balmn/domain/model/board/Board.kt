@@ -30,6 +30,11 @@ data class Board(
     return true
   }
 
+  fun allowCommentAdditionByUser(userAccount: UserAccount): Boolean {
+    // TODO
+    return true
+  }
+
   fun hasSheet(sheetIdentifier: SheetIdentifier): Boolean {
     return sheets.contains(sheetIdentifier)
   }

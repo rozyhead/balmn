@@ -2,8 +2,8 @@ package com.github.rozyhead.balmn.usecase.exception
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.board.BoardIdentifier
-import com.github.rozyhead.balmn.domain.model.board.sheet.Sheet
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetIdentifier
+import com.github.rozyhead.balmn.domain.model.board.card.CardIdentifier
 
 sealed class BoardOperationException(message: String) : Exception(message) {
 
@@ -27,6 +27,12 @@ sealed class BoardOperationException(message: String) : Exception(message) {
 
   class SheetNotFoundException(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier)
     : BoardOperationException("$sheetIdentifier in $boardIdentifier")
+
+  class CommentAdditionNotAllowedException(boardIdentifier: BoardIdentifier, requestedBy: AccountName)
+    : BoardOperationException("${requestedBy.value} can't add comment to board $boardIdentifier")
+
+  class CardNotFoundException(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier, cardIdentifier: CardIdentifier)
+    : BoardOperationException("$cardIdentifier in $sheetIdentifier in $boardIdentifier")
 
   companion object {
 
@@ -56,6 +62,14 @@ sealed class BoardOperationException(message: String) : Exception(message) {
 
     fun sheetNotFound(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier): SheetNotFoundException {
       return SheetNotFoundException(boardIdentifier, sheetIdentifier)
+    }
+
+    fun commentAdditionNotAllowed(boardIdentifier: BoardIdentifier, requestedBy: AccountName): CommentAdditionNotAllowedException {
+      return CommentAdditionNotAllowedException(boardIdentifier, requestedBy)
+    }
+
+    fun cardNotFound(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier, cardIdentifier: CardIdentifier): CardNotFoundException {
+      return CardNotFoundException(boardIdentifier, sheetIdentifier, cardIdentifier)
     }
   }
 

@@ -10,6 +10,10 @@ open class InMemoryCardRepository : CardRepository {
 
   val events = mutableMapOf<CardIdentifier, List<CardEvent>>()
 
+  override fun exists(cardIdentifier: CardIdentifier): Boolean {
+    return events.contains(cardIdentifier)
+  }
+
   override fun save(cardIdentifier: CardIdentifier, events: List<CardEvent>, oldEvents: List<CardEvent>) {
     this.events[cardIdentifier] = oldEvents + events
   }
