@@ -1,11 +1,11 @@
 package com.github.rozyhead.balmn.usecase
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.account.AccountRepository
+import com.github.rozyhead.balmn.service.repository.AccountRepository
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
-import com.github.rozyhead.balmn.domain.model.account.user.UserAccountRepository
+import com.github.rozyhead.balmn.service.repository.UserAccountRepository
 import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthentication
-import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationRepository
+import com.github.rozyhead.balmn.service.repository.PasswordAuthenticationRepository
 import com.github.rozyhead.balmn.domain.model.authentication.password.PlainPassword
 import com.github.rozyhead.balmn.usecase.exception.AccountOperationException
 import org.springframework.stereotype.Service

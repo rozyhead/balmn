@@ -1,11 +1,11 @@
 package com.github.rozyhead.balmn.usecase
 
-import com.github.rozyhead.balmn.domain.model.account.AccountRepository
+import com.github.rozyhead.balmn.service.repository.AccountRepository
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.Board
 import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.domain.model.board.BoardName
-import com.github.rozyhead.balmn.domain.model.board.BoardRepository
+import com.github.rozyhead.balmn.service.repository.BoardRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

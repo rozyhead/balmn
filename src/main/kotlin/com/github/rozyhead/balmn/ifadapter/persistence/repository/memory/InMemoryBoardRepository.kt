@@ -3,7 +3,7 @@ package com.github.rozyhead.balmn.ifadapter.persistence.repository.memory
 import com.github.rozyhead.balmn.domain.model.board.Board
 import com.github.rozyhead.balmn.domain.model.board.BoardEvent
 import com.github.rozyhead.balmn.domain.model.board.BoardId
-import com.github.rozyhead.balmn.domain.model.board.BoardRepository
+import com.github.rozyhead.balmn.service.repository.BoardRepository
 import org.springframework.stereotype.Repository
 
 @Repository

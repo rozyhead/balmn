@@ -1,5 +1,6 @@
-package com.github.rozyhead.balmn.domain.model.board.comment
+package com.github.rozyhead.balmn.service.repository
 
+import com.github.rozyhead.balmn.domain.model.board.comment.CommentId
 import com.github.rozyhead.balmn.domain.model.board.sheet.CommentEvent
 
 /**

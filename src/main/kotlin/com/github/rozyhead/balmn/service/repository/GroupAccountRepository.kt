@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.domain.model.account.group
+package com.github.rozyhead.balmn.service.repository
 
 /**
  * @author takeshi
