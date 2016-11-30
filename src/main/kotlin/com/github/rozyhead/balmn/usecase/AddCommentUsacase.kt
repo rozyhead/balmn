@@ -6,6 +6,7 @@ import com.github.rozyhead.balmn.service.repository.BoardRepository
 import com.github.rozyhead.balmn.domain.model.board.card.CardId
 import com.github.rozyhead.balmn.service.repository.CardRepository
 import com.github.rozyhead.balmn.domain.model.board.comment.Comment
+import com.github.rozyhead.balmn.domain.model.board.comment.CommentContent
 import com.github.rozyhead.balmn.service.repository.CommentRepository
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
@@ -25,13 +26,14 @@ open class AddCommentUsacase(
       val boardId: BoardId,
       val sheetId: SheetId,
       val cardId: CardId,
+      val commentContent: CommentContent,
       val requestedBy: UserAccount
   )
 
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, sheetIdentifier, cardIdentifier, requestedBy) = command
+    val (boardIdentifier, sheetIdentifier, cardIdentifier, commentContent, requestedBy) = command
 
     val boardWithEvents = boardRepository.findById(boardIdentifier)
         ?: throw BoardOperationException.boardNotFound(boardIdentifier)
@@ -57,7 +59,7 @@ open class AddCommentUsacase(
       throw BoardOperationException.cardNotFound(boardIdentifier, sheetIdentifier, cardIdentifier)
     }
 
-    val (comment, commentEvent) = Comment.create(cardIdentifier, requestedBy.accountName)
+    val (comment, commentEvent) = Comment.create(cardIdentifier, commentContent, requestedBy.accountName)
     commentRepository.save(comment.id, listOf(commentEvent), emptyList())
   }
 

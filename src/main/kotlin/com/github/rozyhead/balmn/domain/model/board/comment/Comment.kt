@@ -8,12 +8,13 @@ import com.github.rozyhead.balmn.util.ddd.DomainEntity
 
 data class Comment(
     val id: CommentId = CommentId.generate(),
-    val cardId: CardId = CardId.generate()
+    val cardId: CardId = CardId.generate(),
+    val content: CommentContent = CommentContent("")
 ) : DomainEntity<CommentEvent, Comment> {
 
   companion object {
-    fun create(cardId: CardId, occurredBy: AccountName): Pair<Comment, CommentCreated> {
-      return Comment() and CommentCreated(CommentId.generate(), cardId, occurredBy = occurredBy)
+    fun create(cardId: CardId, content: CommentContent, occurredBy: AccountName): Pair<Comment, CommentCreated> {
+      return Comment() and CommentCreated(CommentId.generate(), cardId, content, occurredBy = occurredBy)
     }
   }
 
