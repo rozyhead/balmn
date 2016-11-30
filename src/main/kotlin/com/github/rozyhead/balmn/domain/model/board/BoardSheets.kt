@@ -1,15 +1,15 @@
 package com.github.rozyhead.balmn.domain.model.board
 
-import com.github.rozyhead.balmn.domain.model.board.sheet.SheetIdentifier
+import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 
 data class BoardSheets(
-    val sheetIdentifiers: List<SheetIdentifier> = emptyList()
+    val sheetIds: List<SheetId> = emptyList()
 ) {
 
-  fun contains(sheetIdentifier: SheetIdentifier): Boolean = sheetIdentifiers.contains(sheetIdentifier)
+  fun contains(sheetId: SheetId): Boolean = sheetIds.contains(sheetId)
 
-  fun addSheet(sheetIdentifier: SheetIdentifier): BoardSheets {
-    require(!contains(sheetIdentifier))
-    return copy(sheetIdentifiers = sheetIdentifiers + sheetIdentifier)
+  fun addSheet(sheetId: SheetId): BoardSheets {
+    require(!contains(sheetId))
+    return copy(sheetIds = sheetIds + sheetId)
   }
 }

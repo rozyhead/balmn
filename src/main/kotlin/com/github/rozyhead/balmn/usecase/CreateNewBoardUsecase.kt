@@ -3,7 +3,7 @@ package com.github.rozyhead.balmn.usecase
 import com.github.rozyhead.balmn.domain.model.account.AccountRepository
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.Board
-import com.github.rozyhead.balmn.domain.model.board.BoardIdentifier
+import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.domain.model.board.BoardName
 import com.github.rozyhead.balmn.domain.model.board.BoardRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
@@ -17,7 +17,7 @@ open class CreateNewBoardUsecase(
 ) {
 
   data class Command(
-      val boardIdentifier: BoardIdentifier,
+      val boardId: BoardId,
       val boardName: BoardName,
       val requestedBy: UserAccount
   )
@@ -40,7 +40,7 @@ open class CreateNewBoardUsecase(
     }
 
     val (board, event) = Board.create(boardIdentifier, boardName, requestedBy.accountName)
-    boardRepository.save(board.identifier, listOf(event), emptyList())
+    boardRepository.save(board.id, listOf(event), emptyList())
   }
 
 }

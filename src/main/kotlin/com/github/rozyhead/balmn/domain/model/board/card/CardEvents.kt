@@ -9,7 +9,7 @@ interface CardEvent : DomainEvent {
 }
 
 data class CardCreated(
-    val cardIdentifier: CardIdentifier,
+    val cardId: CardId,
     val cardTitle: CardTitle,
     override val occurredOn: LocalDateTime = LocalDateTime.now(),
     override val occurredBy: AccountName

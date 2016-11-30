@@ -7,6 +7,6 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.CommentEvent
  */
 interface CommentRepository {
 
-  fun save(commentIdentifier: CommentIdentifier, events: List<CommentEvent>, oldEvents: List<CommentEvent>)
+  fun save(commentId: CommentId, events: List<CommentEvent>, oldEvents: List<CommentEvent>)
 
 }

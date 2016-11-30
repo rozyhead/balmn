@@ -1,37 +1,37 @@
 package com.github.rozyhead.balmn.domain.model.board.sheet
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.board.card.CardIdentifier
+import com.github.rozyhead.balmn.domain.model.board.card.CardId
 import com.github.rozyhead.balmn.util.ddd.DomainEntity
 import java.util.*
 
 data class Sheet(
-    val identifier: SheetIdentifier = SheetIdentifier.generate(),
+    val id: SheetId = SheetId.generate(),
     val name: SheetName = SheetName(""),
     val cards: SheetCards = SheetCards()
 ) : DomainEntity<SheetEvent, Sheet> {
 
   companion object {
     fun create(sheetName: SheetName, occurredBy: AccountName): Pair<Sheet, SheetCreated> {
-      return Sheet() and SheetCreated(SheetIdentifier.generate(), sheetName, occurredBy = occurredBy)
+      return Sheet() and SheetCreated(SheetId.generate(), sheetName, occurredBy = occurredBy)
     }
   }
 
-  fun hasCard(cardIdentifier: CardIdentifier): Boolean {
-    return cards.contains(cardIdentifier)
+  fun hasCard(cardId: CardId): Boolean {
+    return cards.contains(cardId)
   }
 
-  fun addCard(cardIdentifier: CardIdentifier, occurredBy: AccountName): Pair<Sheet, CardAdded> {
-    require(!cards.contains(cardIdentifier))
-    return this and CardAdded(identifier, cardIdentifier, occurredBy = occurredBy)
+  fun addCard(cardId: CardId, occurredBy: AccountName): Pair<Sheet, CardAdded> {
+    require(!cards.contains(cardId))
+    return this and CardAdded(id, cardId, occurredBy = occurredBy)
   }
 
   override fun <E> apply(event: E): Sheet = when (event) {
     is SheetCreated -> {
-      copy(identifier = event.sheetIdentifier, name = event.sheetName)
+      copy(id = event.sheetId, name = event.sheetName)
     }
     is CardAdded -> {
-      copy(cards = cards.addCard(event.cardIdentifier))
+      copy(cards = cards.addCard(event.cardId))
     }
     else -> {
       throw IllegalArgumentException(event.toString())

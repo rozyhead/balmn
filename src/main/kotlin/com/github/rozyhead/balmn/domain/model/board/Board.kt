@@ -2,23 +2,23 @@ package com.github.rozyhead.balmn.domain.model.board
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
-import com.github.rozyhead.balmn.domain.model.board.sheet.SheetIdentifier
+import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.util.ddd.DomainEntity
 
 data class Board(
-    val identifier: BoardIdentifier = BoardIdentifier(AccountName(""), BoardName("")),
+    val id: BoardId = BoardId(AccountName(""), BoardName("")),
     val boardName: BoardName = BoardName(""),
     val sheets: BoardSheets = BoardSheets()
 ) : DomainEntity<BoardEvent, Board> {
 
   companion object {
-    fun create(boardIdentifier: BoardIdentifier, boardName: BoardName, occurredBy: AccountName): Pair<Board, BoardCreated> {
-      return Board() and BoardCreated(boardIdentifier, boardName, occurredBy = occurredBy)
+    fun create(boardId: BoardId, boardName: BoardName, occurredBy: AccountName): Pair<Board, BoardCreated> {
+      return Board() and BoardCreated(boardId, boardName, occurredBy = occurredBy)
     }
   }
 
-  val owner: AccountName = identifier.accountName
-  val name: BoardName = identifier.boardName
+  val owner: AccountName = id.accountName
+  val name: BoardName = id.boardName
 
   fun allowSheetAdditionByUser(userAccount: UserAccount): Boolean {
     // TODO
@@ -35,21 +35,21 @@ data class Board(
     return true
   }
 
-  fun hasSheet(sheetIdentifier: SheetIdentifier): Boolean {
-    return sheets.contains(sheetIdentifier)
+  fun hasSheet(sheetId: SheetId): Boolean {
+    return sheets.contains(sheetId)
   }
 
-  fun addSheet(sheetIdentifier: SheetIdentifier, occurredBy: AccountName): Pair<Board, SheetAdded> {
-    require(!sheets.contains(sheetIdentifier))
-    return this and SheetAdded(identifier, sheetIdentifier, occurredBy = occurredBy)
+  fun addSheet(sheetId: SheetId, occurredBy: AccountName): Pair<Board, SheetAdded> {
+    require(!sheets.contains(sheetId))
+    return this and SheetAdded(id, sheetId, occurredBy = occurredBy)
   }
 
   override fun <E> apply(event: E): Board = when (event) {
     is BoardCreated -> {
-      copy(identifier = event.boardIdentifier, boardName = event.boardName)
+      copy(id = event.boardId, boardName = event.boardName)
     }
     is SheetAdded -> {
-      copy(sheets = sheets.addSheet(event.sheetIdentifier))
+      copy(sheets = sheets.addSheet(event.sheetId))
     }
     else -> {
       throw IllegalArgumentException(event.toString())

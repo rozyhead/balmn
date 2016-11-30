@@ -1,9 +1,9 @@
 package com.github.rozyhead.balmn.usecase.exception
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
-import com.github.rozyhead.balmn.domain.model.board.BoardIdentifier
-import com.github.rozyhead.balmn.domain.model.board.sheet.SheetIdentifier
-import com.github.rozyhead.balmn.domain.model.board.card.CardIdentifier
+import com.github.rozyhead.balmn.domain.model.board.BoardId
+import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
+import com.github.rozyhead.balmn.domain.model.board.card.CardId
 
 sealed class BoardOperationException(message: String) : Exception(message) {
 
@@ -13,26 +13,26 @@ sealed class BoardOperationException(message: String) : Exception(message) {
   class BoardCreationNotAllowedException(ownerAccountName: AccountName, requestedBy: AccountName)
     : BoardOperationException("${requestedBy.value} can't create board to account ${ownerAccountName.value}")
 
-  class BoardAlreadyExistsException(boardIdentifier: BoardIdentifier)
-    : BoardOperationException("$boardIdentifier")
+  class BoardAlreadyExistsException(boardId: BoardId)
+    : BoardOperationException("$boardId")
 
-  class BoardNotFoundException(boardIdentifier: BoardIdentifier)
-    : BoardOperationException("$boardIdentifier")
+  class BoardNotFoundException(boardId: BoardId)
+    : BoardOperationException("$boardId")
 
-  class SheetAdditionNotAllowedException(boardIdentifier: BoardIdentifier, requestedBy: AccountName)
-    : BoardOperationException("${requestedBy.value} can't add sheet to board $boardIdentifier")
+  class SheetAdditionNotAllowedException(boardId: BoardId, requestedBy: AccountName)
+    : BoardOperationException("${requestedBy.value} can't add sheet to board $boardId")
 
-  class CardAdditionNotAllowedException(boardIdentifier: BoardIdentifier, requestedBy: AccountName)
-    : BoardOperationException("${requestedBy.value} can't add card to board $boardIdentifier")
+  class CardAdditionNotAllowedException(boardId: BoardId, requestedBy: AccountName)
+    : BoardOperationException("${requestedBy.value} can't add card to board $boardId")
 
-  class SheetNotFoundException(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier)
-    : BoardOperationException("$sheetIdentifier in $boardIdentifier")
+  class SheetNotFoundException(boardId: BoardId, sheetId: SheetId)
+    : BoardOperationException("$sheetId in $boardId")
 
-  class CommentAdditionNotAllowedException(boardIdentifier: BoardIdentifier, requestedBy: AccountName)
-    : BoardOperationException("${requestedBy.value} can't add comment to board $boardIdentifier")
+  class CommentAdditionNotAllowedException(boardId: BoardId, requestedBy: AccountName)
+    : BoardOperationException("${requestedBy.value} can't add comment to board $boardId")
 
-  class CardNotFoundException(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier, cardIdentifier: CardIdentifier)
-    : BoardOperationException("$cardIdentifier in $sheetIdentifier in $boardIdentifier")
+  class CardNotFoundException(boardId: BoardId, sheetId: SheetId, cardId: CardId)
+    : BoardOperationException("$cardId in $sheetId in $boardId")
 
   companion object {
 
@@ -44,32 +44,32 @@ sealed class BoardOperationException(message: String) : Exception(message) {
       return BoardCreationNotAllowedException(ownerAccountName, requestedBy)
     }
 
-    fun boardAlreadyExists(boardIdentifier: BoardIdentifier): BoardAlreadyExistsException {
-      return BoardAlreadyExistsException(boardIdentifier)
+    fun boardAlreadyExists(boardId: BoardId): BoardAlreadyExistsException {
+      return BoardAlreadyExistsException(boardId)
     }
 
-    fun boardNotFound(boardIdentifier: BoardIdentifier): BoardNotFoundException {
-      return BoardNotFoundException(boardIdentifier)
+    fun boardNotFound(boardId: BoardId): BoardNotFoundException {
+      return BoardNotFoundException(boardId)
     }
 
-    fun sheetAdditionNotAllowed(boardIdentifier: BoardIdentifier, requestedBy: AccountName): SheetAdditionNotAllowedException {
-      return SheetAdditionNotAllowedException(boardIdentifier, requestedBy)
+    fun sheetAdditionNotAllowed(boardId: BoardId, requestedBy: AccountName): SheetAdditionNotAllowedException {
+      return SheetAdditionNotAllowedException(boardId, requestedBy)
     }
 
-    fun cardAdditionNotAllowed(boardIdentifier: BoardIdentifier, requestedBy: AccountName): CardAdditionNotAllowedException {
-      return CardAdditionNotAllowedException(boardIdentifier, requestedBy)
+    fun cardAdditionNotAllowed(boardId: BoardId, requestedBy: AccountName): CardAdditionNotAllowedException {
+      return CardAdditionNotAllowedException(boardId, requestedBy)
     }
 
-    fun sheetNotFound(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier): SheetNotFoundException {
-      return SheetNotFoundException(boardIdentifier, sheetIdentifier)
+    fun sheetNotFound(boardId: BoardId, sheetId: SheetId): SheetNotFoundException {
+      return SheetNotFoundException(boardId, sheetId)
     }
 
-    fun commentAdditionNotAllowed(boardIdentifier: BoardIdentifier, requestedBy: AccountName): CommentAdditionNotAllowedException {
-      return CommentAdditionNotAllowedException(boardIdentifier, requestedBy)
+    fun commentAdditionNotAllowed(boardId: BoardId, requestedBy: AccountName): CommentAdditionNotAllowedException {
+      return CommentAdditionNotAllowedException(boardId, requestedBy)
     }
 
-    fun cardNotFound(boardIdentifier: BoardIdentifier, sheetIdentifier: SheetIdentifier, cardIdentifier: CardIdentifier): CardNotFoundException {
-      return CardNotFoundException(boardIdentifier, sheetIdentifier, cardIdentifier)
+    fun cardNotFound(boardId: BoardId, sheetId: SheetId, cardId: CardId): CardNotFoundException {
+      return CardNotFoundException(boardId, sheetId, cardId)
     }
   }
 

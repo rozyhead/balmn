@@ -5,8 +5,8 @@ package com.github.rozyhead.balmn.domain.model.board.card
  */
 interface CardRepository {
 
-  fun exists(cardIdentifier: CardIdentifier): Boolean
+  fun exists(cardId: CardId): Boolean
 
-  fun save(cardIdentifier: CardIdentifier, events: List<CardEvent>, oldEvents: List<CardEvent>)
+  fun save(cardId: CardId, events: List<CardEvent>, oldEvents: List<CardEvent>)
 
 }

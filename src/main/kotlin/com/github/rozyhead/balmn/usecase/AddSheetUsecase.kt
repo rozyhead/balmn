@@ -1,7 +1,7 @@
 package com.github.rozyhead.balmn.usecase
 
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
-import com.github.rozyhead.balmn.domain.model.board.BoardIdentifier
+import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.domain.model.board.BoardRepository
 import com.github.rozyhead.balmn.domain.model.board.sheet.Sheet
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetName
@@ -17,7 +17,7 @@ open class AddSheetUsecase(
 ) {
 
   data class Command(
-      val boardIdentifier: BoardIdentifier,
+      val boardId: BoardId,
       val sheetName: SheetName,
       val requestedBy: UserAccount
   )
@@ -27,7 +27,7 @@ open class AddSheetUsecase(
   fun execute(command: Command) {
     val (boardIdentifier, sheetName, requestedBy) = command;
 
-    val boardWithEvents = boardRepository.findByIdentifier(boardIdentifier)
+    val boardWithEvents = boardRepository.findById(boardIdentifier)
         ?: throw BoardOperationException.boardNotFound(boardIdentifier)
 
     val (board, oldBoardEvents) = boardWithEvents
@@ -36,9 +36,9 @@ open class AddSheetUsecase(
     }
 
     val (sheet, sheetEvent) = Sheet.create(sheetName, requestedBy.accountName)
-    sheetRepository.save(sheet.identifier, listOf(sheetEvent), emptyList())
+    sheetRepository.save(sheet.id, listOf(sheetEvent), emptyList())
 
-    val (newBoard, boardEvent) = board.addSheet(sheet.identifier, requestedBy.accountName)
-    boardRepository.save(newBoard.identifier, listOf(boardEvent), oldBoardEvents)
+    val (newBoard, boardEvent) = board.addSheet(sheet.id, requestedBy.accountName)
+    boardRepository.save(newBoard.id, listOf(boardEvent), oldBoardEvents)
   }
 }

@@ -2,8 +2,8 @@ package com.github.rozyhead.balmn.domain.model.board.sheet
 
 interface SheetRepository {
 
-  fun findByIdentifier(sheetIdentifier: SheetIdentifier): Pair<Sheet, List<SheetEvent>>?
+  fun findById(sheetId: SheetId): Pair<Sheet, List<SheetEvent>>?
 
-  fun save(sheetIdentifier: SheetIdentifier, events: List<SheetEvent>, oldEvents: List<SheetEvent>)
+  fun save(sheetId: SheetId, events: List<SheetEvent>, oldEvents: List<SheetEvent>)
 
 }
