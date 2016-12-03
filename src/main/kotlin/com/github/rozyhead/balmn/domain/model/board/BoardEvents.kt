@@ -11,7 +11,6 @@ interface BoardEvent : DomainEvent {
 
 data class BoardCreated(
     val boardId: BoardId,
-    val boardName: BoardName,
     override val occurredOn: LocalDateTime = LocalDateTime.now(),
     override val occurredBy: AccountName
 ) : BoardEvent

@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.usecase
+package com.github.rozyhead.balmn.usecase.board
 
 import com.github.rozyhead.balmn.service.repository.AccountRepository
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
@@ -18,14 +18,13 @@ open class CreateNewBoardUsecase(
 
   data class Command(
       val boardId: BoardId,
-      val boardName: BoardName,
       val requestedBy: UserAccount
   )
 
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, boardName, requestedBy) = command
+    val (boardIdentifier, requestedBy) = command
     val ownerAccountName = boardIdentifier.accountName
 
     val ownerAccount = accountRepository.findByAccountName(ownerAccountName)
@@ -39,7 +38,7 @@ open class CreateNewBoardUsecase(
       throw BoardOperationException.boardAlreadyExists(boardIdentifier)
     }
 
-    val (board, event) = Board.create(boardIdentifier, boardName, requestedBy.accountName)
+    val (board, event) = Board.create(boardIdentifier, requestedBy.accountName)
     boardRepository.save(board.id, listOf(event), emptyList())
   }
 

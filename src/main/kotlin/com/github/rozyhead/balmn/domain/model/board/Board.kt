@@ -6,14 +6,13 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.util.ddd.DomainEntity
 
 data class Board(
-    val id: BoardId = BoardId(AccountName(""), BoardName("")),
-    val boardName: BoardName = BoardName(""),
-    val sheets: BoardSheets = BoardSheets()
+    val id: BoardId = BoardId.empty,
+    val sheets: BoardSheets = BoardSheets.empty
 ) : DomainEntity<BoardEvent, Board> {
 
   companion object {
-    fun create(boardId: BoardId, boardName: BoardName, occurredBy: AccountName): Pair<Board, BoardCreated> {
-      return Board() and BoardCreated(boardId, boardName, occurredBy = occurredBy)
+    fun create(boardId: BoardId, occurredBy: AccountName): Pair<Board, BoardCreated> {
+      return Board() and BoardCreated(boardId, occurredBy = occurredBy)
     }
   }
 
@@ -46,7 +45,7 @@ data class Board(
 
   override fun <E> apply(event: E): Board = when (event) {
     is BoardCreated -> {
-      copy(id = event.boardId, boardName = event.boardName)
+      copy(id = event.boardId)
     }
     is SheetAdded -> {
       copy(sheets = sheets.addSheet(event.sheetId))

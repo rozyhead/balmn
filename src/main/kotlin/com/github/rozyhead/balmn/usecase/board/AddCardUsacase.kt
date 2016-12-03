@@ -1,13 +1,11 @@
-package com.github.rozyhead.balmn.usecase
+package com.github.rozyhead.balmn.usecase.board
 
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.service.repository.BoardRepository
-import com.github.rozyhead.balmn.domain.model.board.card.CardId
+import com.github.rozyhead.balmn.domain.model.board.card.Card
 import com.github.rozyhead.balmn.service.repository.CardRepository
-import com.github.rozyhead.balmn.domain.model.board.comment.Comment
-import com.github.rozyhead.balmn.domain.model.board.comment.CommentContent
-import com.github.rozyhead.balmn.service.repository.CommentRepository
+import com.github.rozyhead.balmn.domain.model.board.card.CardTitle
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
@@ -15,32 +13,30 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class AddCommentUsacase(
+open class AddCardUsacase(
     val boardRepository: BoardRepository,
-    val cardRepository: CardRepository,
     val sheetRepository: SheetRepository,
-    val commentRepository: CommentRepository
+    val cardRepository: CardRepository
 ) {
 
   data class Command(
       val boardId: BoardId,
       val sheetId: SheetId,
-      val cardId: CardId,
-      val commentContent: CommentContent,
+      val cardTitle: CardTitle,
       val requestedBy: UserAccount
   )
 
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, sheetIdentifier, cardIdentifier, commentContent, requestedBy) = command
+    val (boardIdentifier, sheetIdentifier, cardTitle, requestedBy) = command
 
     val boardWithEvents = boardRepository.findById(boardIdentifier)
         ?: throw BoardOperationException.boardNotFound(boardIdentifier)
 
     val (board) = boardWithEvents
-    if (!board.allowCommentAdditionByUser(requestedBy)) {
-      throw BoardOperationException.commentAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
+    if (!board.allowCardAdditionByUser(requestedBy)) {
+      throw BoardOperationException.cardAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
     }
 
     val sheetWithEvents = sheetRepository.findById(sheetIdentifier)
@@ -50,17 +46,12 @@ open class AddCommentUsacase(
       throw BoardOperationException.sheetNotFound(boardIdentifier, sheetIdentifier)
     }
 
-    if (!cardRepository.exists(cardIdentifier)) {
-      throw BoardOperationException.cardNotFound(boardIdentifier, sheetIdentifier, cardIdentifier)
-    }
+    val (card, cardEvent) = Card.create(cardTitle, requestedBy.accountName)
+    cardRepository.save(card.id, listOf(cardEvent), emptyList())
 
-    val (sheet) = sheetWithEvents
-    if (!sheet.hasCard(cardIdentifier)) {
-      throw BoardOperationException.cardNotFound(boardIdentifier, sheetIdentifier, cardIdentifier)
-    }
-
-    val (comment, commentEvent) = Comment.create(cardIdentifier, commentContent, requestedBy.accountName)
-    commentRepository.save(comment.id, listOf(commentEvent), emptyList())
+    val (sheet, oldSheetEvents) = sheetWithEvents
+    val (newSheet, sheetEvent) = sheet.addCard(card.id, requestedBy.accountName)
+    sheetRepository.save(newSheet.id, listOf(sheetEvent), oldSheetEvents)
   }
 
 }

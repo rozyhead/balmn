@@ -6,6 +6,10 @@ data class BoardSheets(
     val sheetIds: List<SheetId> = emptyList()
 ) {
 
+  companion object {
+    val empty = BoardSheets()
+  }
+
   fun contains(sheetId: SheetId): Boolean = sheetIds.contains(sheetId)
 
   fun addSheet(sheetId: SheetId): BoardSheets {

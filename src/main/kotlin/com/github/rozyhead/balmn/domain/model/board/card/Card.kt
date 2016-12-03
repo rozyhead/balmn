@@ -6,7 +6,7 @@ import java.util.*
 
 data class Card(
     val id: CardId = CardId.generate(),
-    val title: CardTitle = CardTitle("")
+    val title: CardTitle = CardTitle.empty
 ) : DomainEntity<CardEvent, Card> {
 
   companion object {

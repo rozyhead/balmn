@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.usecase
+package com.github.rozyhead.balmn.usecase.authentication
 
 import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.service.repository.AccountRepository

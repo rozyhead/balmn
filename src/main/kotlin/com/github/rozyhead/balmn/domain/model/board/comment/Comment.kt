@@ -9,7 +9,7 @@ import com.github.rozyhead.balmn.util.ddd.DomainEntity
 data class Comment(
     val id: CommentId = CommentId.generate(),
     val cardId: CardId = CardId.generate(),
-    val content: CommentContent = CommentContent("")
+    val content: CommentContent = CommentContent.empty
 ) : DomainEntity<CommentEvent, Comment> {
 
   companion object {

@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.usecase
+package com.github.rozyhead.balmn.usecase.board
 
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.BoardId

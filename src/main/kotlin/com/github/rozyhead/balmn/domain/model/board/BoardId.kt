@@ -7,6 +7,10 @@ data class BoardId(
     val boardName: BoardName
 ) {
 
+  companion object {
+    val empty = BoardId(AccountName.empty, BoardName.empty)
+  }
+
   override fun toString(): String {
     return "${accountName.value}/${boardName.value}"
   }
