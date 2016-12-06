@@ -11,7 +11,7 @@ data class Board(
 ) : DomainEntity<BoardEvent, Board> {
 
   companion object {
-    fun create(boardId: BoardId, occurredBy: AccountName): Pair<Board, BoardCreated> {
+    fun create(boardId: BoardId, occurredBy: AccountName): Pair<Board, BoardEvent> {
       return Board() and BoardCreated(boardId, occurredBy = occurredBy)
     }
   }
@@ -38,12 +38,12 @@ data class Board(
     return sheets.contains(sheetId)
   }
 
-  fun addSheet(sheetId: SheetId, occurredBy: AccountName): Pair<Board, SheetAdded> {
+  fun addSheet(sheetId: SheetId, occurredBy: AccountName): Pair<Board, BoardEvent> {
     require(!sheets.contains(sheetId))
     return this and SheetAdded(id, sheetId, occurredBy = occurredBy)
   }
 
-  override fun <E> apply(event: E): Board = when (event) {
+  override fun apply(event: BoardEvent): Board = when (event) {
     is BoardCreated -> {
       copy(id = event.boardId)
     }

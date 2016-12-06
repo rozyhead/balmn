@@ -13,12 +13,12 @@ data class Comment(
 ) : DomainEntity<CommentEvent, Comment> {
 
   companion object {
-    fun create(cardId: CardId, content: CommentContent, occurredBy: AccountName): Pair<Comment, CommentCreated> {
+    fun create(cardId: CardId, content: CommentContent, occurredBy: AccountName): Pair<Comment, CommentEvent> {
       return Comment() and CommentCreated(CommentId.generate(), cardId, content, occurredBy = occurredBy)
     }
   }
 
-  override fun <E> apply(event: E): Comment = when (event) {
+  override fun apply(event: CommentEvent): Comment = when (event) {
     is CommentCreated -> {
       copy(id = event.commentId, cardId = event.cardId)
     }

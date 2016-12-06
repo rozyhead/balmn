@@ -10,12 +10,12 @@ data class Card(
 ) : DomainEntity<CardEvent, Card> {
 
   companion object {
-    fun create(cardTitle: CardTitle, occurredBy: AccountName): Pair<Card, CardCreated> {
+    fun create(cardTitle: CardTitle, occurredBy: AccountName): Pair<Card, CardEvent> {
       return Card() and CardCreated(CardId.generate(), cardTitle, occurredBy = occurredBy)
     }
   }
 
-  override fun <E> apply(event: E): Card = when (event) {
+  override fun apply(event: CardEvent): Card = when (event) {
     is CardCreated -> {
       copy(id = event.cardId, title = event.cardTitle)
     }

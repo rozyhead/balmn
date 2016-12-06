@@ -9,7 +9,7 @@ data class PasswordAuthentication(
 ) : DomainEntity<PasswordAuthenticationEvent, PasswordAuthentication> {
 
   companion object {
-    fun create(accountName: AccountName, plainPassword: PlainPassword) : Pair<PasswordAuthentication, PasswordAuthenticationCreated> {
+    fun create(accountName: AccountName, plainPassword: PlainPassword) : Pair<PasswordAuthentication, PasswordAuthenticationEvent> {
       return PasswordAuthentication() and PasswordAuthenticationCreated(accountName, plainPassword.encode())
     }
   }
@@ -17,7 +17,7 @@ data class PasswordAuthentication(
   fun authenticate(accountName: AccountName, plainPassword: PlainPassword): Boolean =
       accountName == this.accountName && encodedPassword.matches(plainPassword)
 
-  override infix fun <E> apply(event: E) = when (event) {
+  override infix fun apply(event: PasswordAuthenticationEvent) = when (event) {
     is PasswordAuthenticationCreated -> {
       copy(accountName = event.accountName, encodedPassword = event.encodedPassword)
     }

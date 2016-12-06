@@ -9,7 +9,7 @@ data class UserAccount(
 ) : Account, DomainEntity<UserAccountEvent, UserAccount> {
 
   companion object {
-    fun create(accountName: AccountName): Pair<UserAccount, UserAccountCreated> {
+    fun create(accountName: AccountName): Pair<UserAccount, UserAccountEvent> {
       return UserAccount() and UserAccountCreated(accountName)
     }
   }
@@ -18,7 +18,7 @@ data class UserAccount(
     return accountName == this.accountName
   }
 
-  override infix fun <E> apply(event: E) = when (event) {
+  override infix fun apply(event: UserAccountEvent) = when (event) {
     is UserAccountCreated -> {
       copy(accountName = event.accountName)
     }
