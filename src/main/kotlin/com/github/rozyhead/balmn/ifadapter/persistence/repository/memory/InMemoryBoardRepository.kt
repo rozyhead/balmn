@@ -7,7 +7,7 @@ import com.github.rozyhead.balmn.service.repository.BoardRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemoryBoardRepository : BoardRepository {
+class InMemoryBoardRepository : BoardRepository {
 
   val events = mutableMapOf<BoardId, List<BoardEvent>>()
 

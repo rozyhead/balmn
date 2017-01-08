@@ -6,7 +6,7 @@ import com.github.rozyhead.balmn.service.repository.CardRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemoryCardRepository : CardRepository {
+class InMemoryCardRepository : CardRepository {
 
   val events = mutableMapOf<CardId, List<CardEvent>>()
 

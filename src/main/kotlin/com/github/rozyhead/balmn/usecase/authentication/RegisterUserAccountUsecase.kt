@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class RegisterUserAccountUsecase(
+class RegisterUserAccountUsecase(
     val accountRepository: AccountRepository,
     val userAccountRepository: UserAccountRepository,
     val passwordAuthenticationRepository: PasswordAuthenticationRepository

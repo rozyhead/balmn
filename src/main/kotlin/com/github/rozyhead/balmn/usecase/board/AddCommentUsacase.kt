@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class AddCommentUsacase(
+class AddCommentUsacase(
     val boardRepository: BoardRepository,
     val cardRepository: CardRepository,
     val sheetRepository: SheetRepository,

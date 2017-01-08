@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class AddCardUsacase(
+class AddCardUsacase(
     val boardRepository: BoardRepository,
     val sheetRepository: SheetRepository,
     val cardRepository: CardRepository

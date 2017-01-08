@@ -6,12 +6,12 @@ import com.github.rozyhead.balmn.service.repository.AccountRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemoryAccountRepository(
+class InMemoryAccountRepository(
     val inMemoryUserAccountRepository: InMemoryUserAccountRepository
 ) : AccountRepository {
 
   override fun exists(accountName: AccountName): Boolean {
-    return inMemoryUserAccountRepository.findByAccountName(accountName) != null;
+    return inMemoryUserAccountRepository.findByAccountName(accountName) != null
   }
 
   override fun findByAccountName(accountName: AccountName): Account? {

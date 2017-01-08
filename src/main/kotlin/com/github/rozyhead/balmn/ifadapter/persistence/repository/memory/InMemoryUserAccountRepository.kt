@@ -7,7 +7,7 @@ import com.github.rozyhead.balmn.service.repository.UserAccountRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemoryUserAccountRepository : UserAccountRepository {
+class InMemoryUserAccountRepository : UserAccountRepository {
 
   val events = mutableMapOf<AccountName, List<UserAccountEvent>>()
 

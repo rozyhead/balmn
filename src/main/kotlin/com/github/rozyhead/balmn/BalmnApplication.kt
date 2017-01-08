@@ -11,10 +11,10 @@ import javax.sql.DataSource
 
 @SpringBootApplication
 @EnableTransactionManagement
-open class BalmnApplication {
+class BalmnApplication {
 
   @Bean
-  open fun transactionManager(dataSource: DataSource) = SpringTransactionManager(dataSource)
+  fun transactionManager(dataSource: DataSource) = SpringTransactionManager(dataSource)
 
 //  @Bean
 //  open fun persistenceExceptionTranslationPostProcessor() = PersistenceExceptionTranslationPostProcessor()

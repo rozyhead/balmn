@@ -7,7 +7,7 @@ import com.github.rozyhead.balmn.service.repository.PasswordAuthenticationReposi
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository {
+class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository {
 
   val events = mutableMapOf<AccountName, List<PasswordAuthenticationEvent>>()
 

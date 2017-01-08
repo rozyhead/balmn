@@ -7,7 +7,7 @@ import com.github.rozyhead.balmn.service.repository.SheetRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemorySheetRepository : SheetRepository {
+class InMemorySheetRepository : SheetRepository {
 
   val events = mutableMapOf<SheetId, List<SheetEvent>>()
 

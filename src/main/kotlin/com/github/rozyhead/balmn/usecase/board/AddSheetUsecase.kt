@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class AddSheetUsecase(
+class AddSheetUsecase(
     val boardRepository: BoardRepository,
     val sheetRepository: SheetRepository
 ) {
@@ -25,7 +25,7 @@ open class AddSheetUsecase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, sheetName, requestedBy) = command;
+    val (boardIdentifier, sheetName, requestedBy) = command
 
     val boardWithEvents = boardRepository.findById(boardIdentifier)
         ?: throw BoardOperationException.boardNotFound(boardIdentifier)

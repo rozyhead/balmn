@@ -6,7 +6,7 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.CommentEvent
 import org.springframework.stereotype.Repository
 
 @Repository
-open class InMemoryCommentRepository : CommentRepository {
+class InMemoryCommentRepository : CommentRepository {
 
   val events = mutableMapOf<CommentId, List<CommentEvent>>()
 
