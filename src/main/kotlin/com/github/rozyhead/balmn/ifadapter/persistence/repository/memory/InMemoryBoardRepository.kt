@@ -4,9 +4,7 @@ import com.github.rozyhead.balmn.domain.model.board.Board
 import com.github.rozyhead.balmn.domain.model.board.BoardEvent
 import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.service.repository.BoardRepository
-import org.springframework.stereotype.Repository
 
-@Repository
 class InMemoryBoardRepository : BoardRepository {
 
   val events = mutableMapOf<BoardId, List<BoardEvent>>()

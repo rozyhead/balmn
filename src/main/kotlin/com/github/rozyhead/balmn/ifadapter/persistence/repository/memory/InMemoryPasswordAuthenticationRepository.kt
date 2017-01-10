@@ -4,9 +4,7 @@ import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthentication
 import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationEvent
 import com.github.rozyhead.balmn.service.repository.PasswordAuthenticationRepository
-import org.springframework.stereotype.Repository
 
-@Repository
 class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository {
 
   val events = mutableMapOf<AccountName, List<PasswordAuthenticationEvent>>()

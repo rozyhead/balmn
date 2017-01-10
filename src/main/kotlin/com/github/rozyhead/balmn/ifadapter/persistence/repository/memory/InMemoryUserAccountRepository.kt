@@ -4,9 +4,7 @@ import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccountEvent
 import com.github.rozyhead.balmn.service.repository.UserAccountRepository
-import org.springframework.stereotype.Repository
 
-@Repository
 class InMemoryUserAccountRepository : UserAccountRepository {
 
   val events = mutableMapOf<AccountName, List<UserAccountEvent>>()

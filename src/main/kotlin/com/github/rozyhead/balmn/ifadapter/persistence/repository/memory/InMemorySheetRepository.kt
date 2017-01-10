@@ -4,9 +4,7 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.Sheet
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetEvent
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
-import org.springframework.stereotype.Repository
 
-@Repository
 class InMemorySheetRepository : SheetRepository {
 
   val events = mutableMapOf<SheetId, List<SheetEvent>>()
