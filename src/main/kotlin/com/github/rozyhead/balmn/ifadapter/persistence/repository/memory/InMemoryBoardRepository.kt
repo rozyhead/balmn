@@ -5,21 +5,15 @@ import com.github.rozyhead.balmn.domain.model.board.BoardEvent
 import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.service.repository.BoardRepository
 
-class InMemoryBoardRepository : BoardRepository {
+class InMemoryBoardRepository : BoardRepository, AbstractInMemoryRepository<BoardEvent, Board, BoardId>() {
 
-  val events = mutableMapOf<BoardId, List<BoardEvent>>()
+  override val emptyEntity: Board
+    get() = Board()
 
-  override fun exists(boardId: BoardId): Boolean {
-    return events.contains(boardId)
-  }
+  override fun exists(boardId: BoardId): Boolean = existsInMemory(boardId)
 
-  override fun findById(boardId: BoardId): Pair<Board, List<BoardEvent>>? {
-    val events = this.events[boardId] ?: return null
-    return Pair(events.fold(Board(), { a, b -> a apply b }), events)
-  }
+  override fun findById(boardId: BoardId): Pair<Board, List<BoardEvent>>? = findByMemory(boardId)
 
-  override fun save(boardId: BoardId, events: List<BoardEvent>, oldEvents: List<BoardEvent>) {
-    this.events[boardId] = oldEvents + events
-  }
+  override fun save(boardId: BoardId, events: List<BoardEvent>, oldEvents: List<BoardEvent>) = saveToMemory(boardId, events, oldEvents)
 
 }

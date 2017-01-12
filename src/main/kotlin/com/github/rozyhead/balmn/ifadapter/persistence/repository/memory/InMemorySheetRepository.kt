@@ -5,17 +5,13 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.SheetEvent
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
 
-class InMemorySheetRepository : SheetRepository {
+class InMemorySheetRepository : SheetRepository, AbstractInMemoryRepository<SheetEvent, Sheet, SheetId>() {
 
-  val events = mutableMapOf<SheetId, List<SheetEvent>>()
+  override val emptyEntity: Sheet
+    get() = Sheet()
 
-  override fun findById(sheetId: SheetId): Pair<Sheet, List<SheetEvent>>? {
-    val events = this.events[sheetId] ?: return null
-    return Pair(events.fold(Sheet(), { a, b -> a apply b }), events)
-  }
+  override fun findById(sheetId: SheetId): Pair<Sheet, List<SheetEvent>>? = findByMemory(sheetId)
 
-  override fun save(sheetId: SheetId, events: List<SheetEvent>, oldEvents: List<SheetEvent>) {
-    this.events[sheetId] = oldEvents + events
-  }
+  override fun save(sheetId: SheetId, events: List<SheetEvent>, oldEvents: List<SheetEvent>) = saveToMemory(sheetId, events, oldEvents)
 
 }

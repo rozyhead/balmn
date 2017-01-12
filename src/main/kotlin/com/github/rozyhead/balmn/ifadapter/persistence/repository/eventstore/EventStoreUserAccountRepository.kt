@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 @Repository
 class EventStoreUserAccountRepository(
     eventStore: EventStore
-) : UserAccountRepository, AbstractEventStoreRepository<UserAccountEvent, UserAccount>(eventStore) {
+) : UserAccountRepository, AbstractEventStoreRepository<UserAccountEvent, UserAccount, AccountName>(eventStore) {
 
   override val eventClass: KClass<UserAccountEvent>
     get() = UserAccountEvent::class
@@ -19,10 +19,10 @@ class EventStoreUserAccountRepository(
   override val emptyEntity: UserAccount
     get() = UserAccount()
 
-  fun streamId(accountName: AccountName) = "UserAccount(${accountName.value}"
+  override fun streamIdOf(entityId: AccountName): String = "UserAccount(${entityId.value})"
 
-  override fun findByAccountName(accountName: AccountName): Pair<UserAccount, List<UserAccountEvent>>? = findByStore(streamId(accountName))
+  override fun findByAccountName(accountName: AccountName): Pair<UserAccount, List<UserAccountEvent>>? = findByStore(accountName)
 
-  override fun save(accountName: AccountName, events: List<UserAccountEvent>, oldEvents: List<UserAccountEvent>) = saveToStore(streamId(accountName), events, oldEvents)
+  override fun save(accountName: AccountName, events: List<UserAccountEvent>, oldEvents: List<UserAccountEvent>) = saveToStore(accountName, events, oldEvents)
 
 }

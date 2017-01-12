@@ -5,23 +5,25 @@ import com.github.rozyhead.balmn.util.ddd.DomainEntity
 import com.github.rozyhead.balmn.util.ddd.DomainEvent
 import kotlin.reflect.KClass
 
-abstract class AbstractEventStoreRepository<EV : DomainEvent, out EN : DomainEntity<EV, EN>>(
+abstract class AbstractEventStoreRepository<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, ID>(
     val eventStore: EventStore
 ) {
 
-  abstract val eventClass: KClass<EV>
-  abstract val emptyEntity: EN
+  abstract val eventClass: KClass<EVENT>
+  abstract val emptyEntity: ENTITY
 
-  fun exists(streamId: String): Boolean = eventStore.exists(streamId)
+  abstract fun streamIdOf(entityId: ID): String
 
-  fun findByStore(streamId: String): Pair<EN, List<EV>>? {
-    val events = eventStore.events(streamId)?.map { eventClass.java.cast(it) } ?: return null
+  fun existsInStore(entityId: ID): Boolean = eventStore.exists(streamIdOf(entityId))
+
+  fun findByStore(entityId: ID): Pair<ENTITY, List<EVENT>>? {
+    val events = eventStore.events(streamIdOf(entityId))?.map { eventClass.java.cast(it) } ?: return null
     val entity = events.fold(emptyEntity, { entity, event -> entity apply event })
     return Pair(entity, events)
   }
 
-  fun saveToStore(streamId: String, events: List<EV>, oldEvents: List<EV>) {
-    eventStore.batchAppend(streamId, oldEvents.size.toLong(), events)
+  fun saveToStore(entityId: ID, events: List<EVENT>, oldEvents: List<EVENT>) {
+    eventStore.batchAppend(streamIdOf(entityId), oldEvents.size.toLong(), events)
   }
 
 }

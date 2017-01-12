@@ -1,5 +1,6 @@
 package com.github.rozyhead.balmn.ifadapter.persistence.repository.memory
 
+import com.github.rozyhead.balmn.ifadapter.persistence.repository.delegate.DelegatingAccountRepository
 import com.github.rozyhead.balmn.service.repository.*
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -7,10 +8,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class InMemoryRepositoryConfiguration {
-
-  @Bean
-  @ConditionalOnMissingBean(AccountRepository::class)
-  fun inMemoryAccountRepository(userAccountRepository: UserAccountRepository) = InMemoryAccountRepository(userAccountRepository)
 
   @Bean
   @ConditionalOnMissingBean(BoardRepository::class)

@@ -5,17 +5,13 @@ import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAu
 import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAuthenticationEvent
 import com.github.rozyhead.balmn.service.repository.PasswordAuthenticationRepository
 
-class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository {
+class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository, AbstractInMemoryRepository<PasswordAuthenticationEvent, PasswordAuthentication, AccountName>() {
 
-  val events = mutableMapOf<AccountName, List<PasswordAuthenticationEvent>>()
+  override val emptyEntity: PasswordAuthentication
+    get() = PasswordAuthentication()
 
-  override fun findByAccountName(accountName: AccountName): Pair<PasswordAuthentication, List<PasswordAuthenticationEvent>>? {
-    val events = this.events[accountName] ?: return null
-    return Pair(events.fold(PasswordAuthentication(), { a, b -> a apply b }), events)
-  }
+  override fun findByAccountName(accountName: AccountName): Pair<PasswordAuthentication, List<PasswordAuthenticationEvent>>? = findByMemory(accountName)
 
-  override fun save(accountName: AccountName, events: List<PasswordAuthenticationEvent>, oldEvents: List<PasswordAuthenticationEvent>) {
-    this.events[accountName] = oldEvents + events
-  }
+  override fun save(accountName: AccountName, events: List<PasswordAuthenticationEvent>, oldEvents: List<PasswordAuthenticationEvent>) = saveToMemory(accountName, events, oldEvents)
 
 }
