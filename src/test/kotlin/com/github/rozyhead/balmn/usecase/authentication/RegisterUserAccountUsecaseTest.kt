@@ -7,6 +7,7 @@ import com.github.rozyhead.balmn.ifadapter.persistence.repository.memory.InMemor
 import com.github.rozyhead.balmn.ifadapter.persistence.repository.memory.InMemoryUserAccountRepository
 import com.github.rozyhead.balmn.usecase.exception.AccountOperationException
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Test
 
 class RegisterUserAccountUsecaseTest {
@@ -18,7 +19,7 @@ class RegisterUserAccountUsecaseTest {
   val sut = RegisterUserAccountUsecase(accountRepository, userAccountRepository, passwordAuthenticationRepository)
 
   @Test
-  fun save_user_account_and_password_authentication_when_account_not_exists() {
+  fun execute() {
     val accountName = AccountName("test")
     val plainPassword = PlainPassword("secret")
     val command = RegisterUserAccountUsecase.Command(accountName, plainPassword)
@@ -29,14 +30,16 @@ class RegisterUserAccountUsecaseTest {
     assertThat(passwordAuthenticationRepository.existsInMemory(accountName)).isTrue()
   }
 
-  @Test(expected = AccountOperationException.AccountNameAlreadyUsedException::class)
-  fun throw_account_name_already_used_when_account_exists() {
+  @Test
+  fun execute_when_account_already_exists() {
     val accountName = AccountName("test")
-    val plainPassword = PlainPassword("secret")
-    val command = RegisterUserAccountUsecase.Command(accountName, plainPassword)
     userAccountRepository.saveToMemory(accountName, emptyList(), emptyList())
 
-    sut.execute(command)
+    val plainPassword = PlainPassword("secret")
+    val command = RegisterUserAccountUsecase.Command(accountName, plainPassword)
+
+    assertThatThrownBy { sut.execute(command) }
+        .isInstanceOf(AccountOperationException.AccountNameAlreadyUsedException::class.java)
   }
 
 }
