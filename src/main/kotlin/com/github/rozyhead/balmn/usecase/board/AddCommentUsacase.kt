@@ -33,33 +33,33 @@ class AddCommentUsacase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, sheetIdentifier, cardIdentifier, commentContent, requestedBy) = command
+    val (boardId, sheetId, cardId, commentContent, requestedBy) = command
 
-    val boardWithEvents = boardRepository.findById(boardIdentifier)
-        ?: throw BoardOperationException.boardNotFound(boardIdentifier)
+    val boardWithEvents = boardRepository.findById(boardId)
+        ?: throw BoardOperationException.boardNotFound(boardId)
 
     val (board) = boardWithEvents
     if (!board.allowCommentAdditionByUser(requestedBy)) {
-      throw BoardOperationException.commentAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
+      throw BoardOperationException.commentAdditionNotAllowed(boardId, requestedBy.accountName)
     }
 
-    val sheetWithEvents = sheetRepository.findById(sheetIdentifier)
-        ?: throw BoardOperationException.sheetNotFound(boardIdentifier, sheetIdentifier)
+    val sheetWithEvents = sheetRepository.findById(sheetId)
+        ?: throw BoardOperationException.sheetNotFound(boardId, sheetId)
 
-    if (!board.hasSheet(sheetIdentifier)) {
-      throw BoardOperationException.sheetNotFound(boardIdentifier, sheetIdentifier)
+    if (!board.hasSheet(sheetId)) {
+      throw BoardOperationException.sheetNotFound(boardId, sheetId)
     }
 
-    if (!cardRepository.exists(cardIdentifier)) {
-      throw BoardOperationException.cardNotFound(boardIdentifier, sheetIdentifier, cardIdentifier)
+    if (!cardRepository.exists(cardId)) {
+      throw BoardOperationException.cardNotFound(boardId, sheetId, cardId)
     }
 
     val (sheet) = sheetWithEvents
-    if (!sheet.hasCard(cardIdentifier)) {
-      throw BoardOperationException.cardNotFound(boardIdentifier, sheetIdentifier, cardIdentifier)
+    if (!sheet.hasCard(cardId)) {
+      throw BoardOperationException.cardNotFound(boardId, sheetId, cardId)
     }
 
-    val (comment, commentEvent) = Comment.create(cardIdentifier, commentContent, requestedBy.accountName)
+    val (comment, commentEvent) = Comment.create(cardId, commentContent, requestedBy.accountName)
     commentRepository.save(comment.id, listOf(commentEvent), emptyList())
   }
 

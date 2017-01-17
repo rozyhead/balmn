@@ -25,14 +25,14 @@ class AddSheetUsecase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, sheetName, requestedBy) = command
+    val (boardId, sheetName, requestedBy) = command
 
-    val boardWithEvents = boardRepository.findById(boardIdentifier)
-        ?: throw BoardOperationException.boardNotFound(boardIdentifier)
+    val boardWithEvents = boardRepository.findById(boardId)
+        ?: throw BoardOperationException.boardNotFound(boardId)
 
     val (board, oldBoardEvents) = boardWithEvents
     if (!board.allowSheetAdditionByUser(requestedBy)) {
-      throw BoardOperationException.sheetAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
+      throw BoardOperationException.sheetAdditionNotAllowed(boardId, requestedBy.accountName)
     }
 
     val (sheet, sheetEvent) = Sheet.create(sheetName, requestedBy.accountName)

@@ -29,21 +29,21 @@ class AddCardUsacase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, sheetIdentifier, cardTitle, requestedBy) = command
+    val (boardId, sheetId, cardTitle, requestedBy) = command
 
-    val boardWithEvents = boardRepository.findById(boardIdentifier)
-        ?: throw BoardOperationException.boardNotFound(boardIdentifier)
+    val boardWithEvents = boardRepository.findById(boardId)
+        ?: throw BoardOperationException.boardNotFound(boardId)
 
     val (board) = boardWithEvents
     if (!board.allowCardAdditionByUser(requestedBy)) {
-      throw BoardOperationException.cardAdditionNotAllowed(boardIdentifier, requestedBy.accountName)
+      throw BoardOperationException.cardAdditionNotAllowed(boardId, requestedBy.accountName)
     }
 
-    val sheetWithEvents = sheetRepository.findById(sheetIdentifier)
-        ?: throw BoardOperationException.sheetNotFound(boardIdentifier, sheetIdentifier)
+    val sheetWithEvents = sheetRepository.findById(sheetId)
+        ?: throw BoardOperationException.sheetNotFound(boardId, sheetId)
 
-    if (!board.hasSheet(sheetIdentifier)) {
-      throw BoardOperationException.sheetNotFound(boardIdentifier, sheetIdentifier)
+    if (!board.hasSheet(sheetId)) {
+      throw BoardOperationException.sheetNotFound(boardId, sheetId)
     }
 
     val (card, cardEvent) = Card.create(cardTitle, requestedBy.accountName)

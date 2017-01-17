@@ -24,8 +24,8 @@ class CreateNewBoardUsecase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardIdentifier, requestedBy) = command
-    val ownerAccountName = boardIdentifier.accountName
+    val (boardId, requestedBy) = command
+    val ownerAccountName = boardId.accountName
 
     val ownerAccount = accountRepository.findByAccountName(ownerAccountName)
         ?: throw BoardOperationException.ownerAccountNotFound(ownerAccountName)
@@ -34,11 +34,11 @@ class CreateNewBoardUsecase(
       throw BoardOperationException.boardCreationNotAllowed(ownerAccountName, requestedBy.accountName)
     }
 
-    if (boardRepository.exists(boardIdentifier)) {
-      throw BoardOperationException.boardAlreadyExists(boardIdentifier)
+    if (boardRepository.exists(boardId)) {
+      throw BoardOperationException.boardAlreadyExists(boardId)
     }
 
-    val (board, event) = Board.create(boardIdentifier, requestedBy.accountName)
+    val (board, event) = Board.create(boardId, requestedBy.accountName)
     boardRepository.save(board.id, listOf(event), emptyList())
   }
 
