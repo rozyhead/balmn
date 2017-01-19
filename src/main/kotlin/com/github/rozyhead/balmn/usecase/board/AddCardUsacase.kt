@@ -10,6 +10,7 @@ import com.github.rozyhead.balmn.domain.model.board.card.CardTitle
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
+import com.github.rozyhead.balmn.util.ddd.Version
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -49,11 +50,11 @@ class AddCardUsacase(
     }
 
     val (card, cardEvent) = Card.create(cardTitle, requestedBy.accountName)
-    cardRepository.save(card.id, listOf(cardEvent), emptyList())
+    cardRepository.save(card.id, Version.zero, cardEvent)
 
-    val (sheet, oldSheetEvents) = sheetWithEvents
+    val (sheet, sheetVersion) = sheetWithEvents
     val (newSheet, sheetEvent) = sheet.addCard(card.id, requestedBy.accountName)
-    sheetRepository.save(newSheet.id, listOf(sheetEvent), oldSheetEvents)
+    sheetRepository.save(newSheet.id, sheetVersion, sheetEvent)
   }
 
 }

@@ -4,6 +4,7 @@ import com.github.rozyhead.balmn.domain.model.board.card.Card
 import com.github.rozyhead.balmn.domain.model.board.card.CardEvent
 import com.github.rozyhead.balmn.domain.model.board.card.CardId
 import com.github.rozyhead.balmn.service.repository.CardRepository
+import com.github.rozyhead.balmn.util.ddd.Version
 
 class InMemoryCardRepository : CardRepository, AbstractInMemoryRepository<CardEvent, Card, CardId>() {
 
@@ -12,6 +13,7 @@ class InMemoryCardRepository : CardRepository, AbstractInMemoryRepository<CardEv
 
   override fun exists(cardId: CardId): Boolean = existsInMemory(cardId)
 
-  override fun save(cardId: CardId, events: List<CardEvent>, oldEvents: List<CardEvent>) = saveToMemory(cardId, events, oldEvents)
+  override fun save(cardId: CardId, version: Version, vararg additionalEvents: CardEvent)
+      = saveToMemory(cardId, version, *additionalEvents)
 
 }

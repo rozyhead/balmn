@@ -12,6 +12,7 @@ import com.github.rozyhead.balmn.service.repository.CommentRepository
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
+import com.github.rozyhead.balmn.util.ddd.Version
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -62,7 +63,7 @@ class AddCommentUsacase(
     }
 
     val (comment, commentEvent) = Comment.create(cardId, commentContent, requestedBy.accountName)
-    commentRepository.save(comment.id, listOf(commentEvent), emptyList())
+    commentRepository.save(comment.id, Version.zero, commentEvent)
   }
 
 }

@@ -8,6 +8,7 @@ import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAu
 import com.github.rozyhead.balmn.service.repository.PasswordAuthenticationRepository
 import com.github.rozyhead.balmn.domain.model.authentication.password.PlainPassword
 import com.github.rozyhead.balmn.usecase.exception.AccountOperationException
+import com.github.rozyhead.balmn.util.ddd.Version
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -32,10 +33,10 @@ class RegisterUserAccountUsecase(
     }
 
     val (userAccount, userAccountEvent) = UserAccount.create(accountName)
-    userAccountRepository.save(userAccount.accountName, listOf(userAccountEvent), emptyList())
+    userAccountRepository.save(userAccount.accountName, Version.zero, userAccountEvent)
 
     val (passwordAuthentication, passwordAuthenticationEvent) = PasswordAuthentication.create(accountName, plainPassword)
-    passwordAuthenticationRepository.save(passwordAuthentication.accountName, listOf(passwordAuthenticationEvent), emptyList())
+    passwordAuthenticationRepository.save(passwordAuthentication.accountName, Version.zero, passwordAuthenticationEvent)
   }
 
 }

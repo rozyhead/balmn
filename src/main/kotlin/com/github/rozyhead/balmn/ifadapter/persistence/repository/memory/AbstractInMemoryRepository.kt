@@ -2,6 +2,7 @@ package com.github.rozyhead.balmn.ifadapter.persistence.repository.memory
 
 import com.github.rozyhead.balmn.util.ddd.DomainEntity
 import com.github.rozyhead.balmn.util.ddd.DomainEvent
+import com.github.rozyhead.balmn.util.ddd.Version
 
 abstract class AbstractInMemoryRepository<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, ID> {
 
@@ -11,16 +12,16 @@ abstract class AbstractInMemoryRepository<EVENT : DomainEvent, out ENTITY : Doma
 
   fun existsInMemory(entityId: ID): Boolean = events.contains(entityId)
 
-  fun findByMemory(entityId: ID): Pair<ENTITY, List<EVENT>>? {
+  fun findByMemory(entityId: ID): Pair<ENTITY, Version>? {
     val events = this.events[entityId] ?: return null
-    return Pair(events.fold(emptyEntity, { a, b -> a apply b }), events)
+    return Pair(events.fold(emptyEntity, { a, b -> a apply b }), Version(events.size.toLong()))
   }
 
-  fun saveToMemory(entityId: ID, events: List<EVENT>, oldEvents: List<EVENT>) {
+  fun saveToMemory(entityId: ID, version: Version, vararg additionalEvents: EVENT) {
     val savedOldEvents = this.events.getOrElse(entityId, { emptyList() })
-    require(savedOldEvents.size == oldEvents.size)
+    require(version.value == savedOldEvents.size.toLong())
 
-    this.events[entityId] = savedOldEvents + events
+    this.events[entityId] = savedOldEvents + additionalEvents
   }
 
 }

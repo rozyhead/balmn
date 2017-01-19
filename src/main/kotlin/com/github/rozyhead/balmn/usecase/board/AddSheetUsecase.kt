@@ -8,6 +8,7 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.Sheet
 import com.github.rozyhead.balmn.domain.model.board.sheet.SheetName
 import com.github.rozyhead.balmn.service.repository.SheetRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
+import com.github.rozyhead.balmn.util.ddd.Version
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -32,15 +33,15 @@ class AddSheetUsecase(
     val boardWithEvents = boardRepository.findByAccountNameAndBoardName(accountName, boardName)
         ?: throw BoardOperationException.boardNotFound(accountName, boardName)
 
-    val (board, oldBoardEvents) = boardWithEvents
+    val (board, boardVersion) = boardWithEvents
     if (!board.allowSheetAdditionByUser(requestedBy)) {
       throw BoardOperationException.sheetAdditionNotAllowed(accountName, boardName, requestedBy.accountName)
     }
 
     val (sheet, sheetEvent) = Sheet.create(sheetName, requestedBy.accountName)
-    sheetRepository.save(sheet.id, listOf(sheetEvent), emptyList())
+    sheetRepository.save(sheet.id, Version.zero, sheetEvent)
 
     val (newBoard, boardEvent) = board.addSheet(sheet.id, requestedBy.accountName)
-    boardRepository.save(newBoard.accountName, newBoard.boardName, listOf(boardEvent), oldBoardEvents)
+    boardRepository.save(newBoard.accountName, newBoard.boardName, boardVersion, boardEvent)
   }
 }

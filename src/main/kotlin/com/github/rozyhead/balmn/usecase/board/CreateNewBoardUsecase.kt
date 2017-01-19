@@ -7,6 +7,7 @@ import com.github.rozyhead.balmn.domain.model.board.Board
 import com.github.rozyhead.balmn.domain.model.board.BoardName
 import com.github.rozyhead.balmn.service.repository.BoardRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
+import com.github.rozyhead.balmn.util.ddd.Version
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -39,7 +40,7 @@ class CreateNewBoardUsecase(
     }
 
     val (board, event) = Board.create(accountName, boardName, requestedBy.accountName)
-    boardRepository.save(board.accountName, board.boardName, listOf(event), emptyList())
+    boardRepository.save(board.accountName, board.boardName, Version.zero, event)
   }
 
 }

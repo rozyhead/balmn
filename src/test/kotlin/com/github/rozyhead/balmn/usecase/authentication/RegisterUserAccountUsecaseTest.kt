@@ -6,6 +6,7 @@ import com.github.rozyhead.balmn.ifadapter.persistence.repository.delegate.Deleg
 import com.github.rozyhead.balmn.ifadapter.persistence.repository.memory.InMemoryPasswordAuthenticationRepository
 import com.github.rozyhead.balmn.ifadapter.persistence.repository.memory.InMemoryUserAccountRepository
 import com.github.rozyhead.balmn.usecase.exception.AccountOperationException
+import com.github.rozyhead.balmn.util.ddd.Version
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Test
@@ -33,7 +34,7 @@ class RegisterUserAccountUsecaseTest {
   @Test
   fun execute_when_account_already_exists() {
     val accountName = AccountName("test")
-    userAccountRepository.saveToMemory(accountName, emptyList(), emptyList())
+    userAccountRepository.saveToMemory(accountName, Version.zero)
 
     val plainPassword = PlainPassword("secret")
     val command = RegisterUserAccountUsecase.Command(accountName, plainPassword)
