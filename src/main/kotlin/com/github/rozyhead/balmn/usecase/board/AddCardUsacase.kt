@@ -1,7 +1,8 @@
 package com.github.rozyhead.balmn.usecase.board
 
+import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
-import com.github.rozyhead.balmn.domain.model.board.BoardId
+import com.github.rozyhead.balmn.domain.model.board.BoardName
 import com.github.rozyhead.balmn.service.repository.BoardRepository
 import com.github.rozyhead.balmn.domain.model.board.card.Card
 import com.github.rozyhead.balmn.service.repository.CardRepository
@@ -20,7 +21,8 @@ class AddCardUsacase(
 ) {
 
   data class Command(
-      val boardId: BoardId,
+      val accountName: AccountName,
+      val boardName: BoardName,
       val sheetId: SheetId,
       val cardTitle: CardTitle,
       val requestedBy: UserAccount
@@ -29,21 +31,21 @@ class AddCardUsacase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardId, sheetId, cardTitle, requestedBy) = command
+    val (accountName, boardName, sheetId, cardTitle, requestedBy) = command
 
-    val boardWithEvents = boardRepository.findById(boardId)
-        ?: throw BoardOperationException.boardNotFound(boardId)
+    val boardWithEvents = boardRepository.findByAccountNameAndBoardName(accountName, boardName)
+        ?: throw BoardOperationException.boardNotFound(accountName, boardName)
 
     val (board) = boardWithEvents
     if (!board.allowCardAdditionByUser(requestedBy)) {
-      throw BoardOperationException.cardAdditionNotAllowed(boardId, requestedBy.accountName)
+      throw BoardOperationException.cardAdditionNotAllowed(accountName, boardName, requestedBy.accountName)
     }
 
     val sheetWithEvents = sheetRepository.findById(sheetId)
-        ?: throw BoardOperationException.sheetNotFound(boardId, sheetId)
+        ?: throw BoardOperationException.sheetNotFound(accountName, boardName, sheetId)
 
     if (!board.hasSheet(sheetId)) {
-      throw BoardOperationException.sheetNotFound(boardId, sheetId)
+      throw BoardOperationException.sheetNotFound(accountName, boardName, sheetId)
     }
 
     val (card, cardEvent) = Card.create(cardTitle, requestedBy.accountName)

@@ -1,9 +1,9 @@
 package com.github.rozyhead.balmn.usecase.board
 
+import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.service.repository.AccountRepository
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
 import com.github.rozyhead.balmn.domain.model.board.Board
-import com.github.rozyhead.balmn.domain.model.board.BoardId
 import com.github.rozyhead.balmn.domain.model.board.BoardName
 import com.github.rozyhead.balmn.service.repository.BoardRepository
 import com.github.rozyhead.balmn.usecase.exception.BoardOperationException
@@ -17,29 +17,29 @@ class CreateNewBoardUsecase(
 ) {
 
   data class Command(
-      val boardId: BoardId,
+      val accountName: AccountName,
+      val boardName: BoardName,
       val requestedBy: UserAccount
   )
 
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardId, requestedBy) = command
-    val ownerAccountName = boardId.accountName
+    val (accountName, boardName, requestedBy) = command
 
-    val ownerAccount = accountRepository.findByAccountName(ownerAccountName)
-        ?: throw BoardOperationException.ownerAccountNotFound(ownerAccountName)
+    val ownerAccount = accountRepository.findByAccountName(accountName)
+        ?: throw BoardOperationException.ownerAccountNotFound(accountName)
 
     if (!ownerAccount.allowBoardCreationForUser(requestedBy.accountName)) {
-      throw BoardOperationException.boardCreationNotAllowed(ownerAccountName, requestedBy.accountName)
+      throw BoardOperationException.boardCreationNotAllowed(accountName, requestedBy.accountName)
     }
 
-    if (boardRepository.exists(boardId)) {
-      throw BoardOperationException.boardAlreadyExists(boardId)
+    if (boardRepository.exists(accountName, boardName)) {
+      throw BoardOperationException.boardAlreadyExists(accountName, boardName)
     }
 
-    val (board, event) = Board.create(boardId, requestedBy.accountName)
-    boardRepository.save(board.id, listOf(event), emptyList())
+    val (board, event) = Board.create(accountName, boardName, requestedBy.accountName)
+    boardRepository.save(board.accountName, board.boardName, listOf(event), emptyList())
   }
 
 }

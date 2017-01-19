@@ -1,15 +1,16 @@
 package com.github.rozyhead.balmn.service.repository
 
+import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.board.Board
 import com.github.rozyhead.balmn.domain.model.board.BoardEvent
-import com.github.rozyhead.balmn.domain.model.board.BoardId
+import com.github.rozyhead.balmn.domain.model.board.BoardName
 
 interface BoardRepository {
 
-  fun exists(boardId: BoardId): Boolean
+  fun exists(accountName: AccountName, boardName: BoardName): Boolean
 
-  fun findById(boardId: BoardId): Pair<Board, List<BoardEvent>>?
+  fun findByAccountNameAndBoardName(accountName: AccountName, boardName: BoardName): Pair<Board, List<BoardEvent>>?
 
-  fun save(boardId: BoardId, events: List<BoardEvent>, oldEvents: List<BoardEvent>)
+  fun save(accountName: AccountName, boardName: BoardName, events: List<BoardEvent>, oldEvents: List<BoardEvent>)
 
 }

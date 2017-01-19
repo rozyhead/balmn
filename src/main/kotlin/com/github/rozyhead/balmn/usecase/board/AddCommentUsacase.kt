@@ -1,7 +1,8 @@
 package com.github.rozyhead.balmn.usecase.board
 
+import com.github.rozyhead.balmn.domain.model.account.AccountName
 import com.github.rozyhead.balmn.domain.model.account.user.UserAccount
-import com.github.rozyhead.balmn.domain.model.board.BoardId
+import com.github.rozyhead.balmn.domain.model.board.BoardName
 import com.github.rozyhead.balmn.service.repository.BoardRepository
 import com.github.rozyhead.balmn.domain.model.board.card.CardId
 import com.github.rozyhead.balmn.service.repository.CardRepository
@@ -23,7 +24,8 @@ class AddCommentUsacase(
 ) {
 
   data class Command(
-      val boardId: BoardId,
+      val accountName: AccountName,
+      val boardName: BoardName,
       val sheetId: SheetId,
       val cardId: CardId,
       val commentContent: CommentContent,
@@ -33,30 +35,30 @@ class AddCommentUsacase(
   @Transactional
   @Throws(BoardOperationException::class)
   fun execute(command: Command) {
-    val (boardId, sheetId, cardId, commentContent, requestedBy) = command
+    val (accountName, boardName, sheetId, cardId, commentContent, requestedBy) = command
 
-    val boardWithEvents = boardRepository.findById(boardId)
-        ?: throw BoardOperationException.boardNotFound(boardId)
+    val boardWithEvents = boardRepository.findByAccountNameAndBoardName(accountName, boardName)
+        ?: throw BoardOperationException.boardNotFound(accountName, boardName)
 
     val (board) = boardWithEvents
     if (!board.allowCommentAdditionByUser(requestedBy)) {
-      throw BoardOperationException.commentAdditionNotAllowed(boardId, requestedBy.accountName)
+      throw BoardOperationException.commentAdditionNotAllowed(accountName, boardName, requestedBy.accountName)
     }
 
     val sheetWithEvents = sheetRepository.findById(sheetId)
-        ?: throw BoardOperationException.sheetNotFound(boardId, sheetId)
+        ?: throw BoardOperationException.sheetNotFound(accountName, boardName, sheetId)
 
     if (!board.hasSheet(sheetId)) {
-      throw BoardOperationException.sheetNotFound(boardId, sheetId)
+      throw BoardOperationException.sheetNotFound(accountName, boardName, sheetId)
     }
 
     if (!cardRepository.exists(cardId)) {
-      throw BoardOperationException.cardNotFound(boardId, sheetId, cardId)
+      throw BoardOperationException.cardNotFound(accountName, boardName, sheetId, cardId)
     }
 
     val (sheet) = sheetWithEvents
     if (!sheet.hasCard(cardId)) {
-      throw BoardOperationException.cardNotFound(boardId, sheetId, cardId)
+      throw BoardOperationException.cardNotFound(accountName, boardName, sheetId, cardId)
     }
 
     val (comment, commentEvent) = Comment.create(cardId, commentContent, requestedBy.accountName)

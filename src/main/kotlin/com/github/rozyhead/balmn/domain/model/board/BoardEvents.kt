@@ -10,13 +10,15 @@ interface BoardEvent : DomainEvent {
 }
 
 data class BoardCreated(
-    val boardId: BoardId,
+    val accountName: AccountName,
+    val boardName: BoardName,
     override val occurredOn: LocalDateTime = LocalDateTime.now(),
     override val occurredBy: AccountName
 ) : BoardEvent
 
 data class SheetAdded(
-    val boardId: BoardId,
+    val accountName: AccountName,
+    val boardName: BoardName,
     val sheetId: SheetId,
     override val occurredOn: LocalDateTime = LocalDateTime.now(),
     override val occurredBy: AccountName
