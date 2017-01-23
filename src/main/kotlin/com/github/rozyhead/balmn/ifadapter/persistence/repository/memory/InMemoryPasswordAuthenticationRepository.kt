@@ -6,14 +6,18 @@ import com.github.rozyhead.balmn.domain.model.authentication.password.PasswordAu
 import com.github.rozyhead.balmn.service.repository.PasswordAuthenticationRepository
 import com.github.rozyhead.balmn.util.ddd.Version
 
-class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository, AbstractInMemoryRepository<PasswordAuthenticationEvent, PasswordAuthentication, AccountName>() {
+class InMemoryPasswordAuthenticationRepository : PasswordAuthenticationRepository {
 
-  override val emptyEntity: PasswordAuthentication
-    get() = PasswordAuthentication()
+  val helper = InMemoryRepositoryHelper<PasswordAuthenticationEvent, PasswordAuthentication, AccountName>(
+      emptyEntity = PasswordAuthentication()
+  )
+
+  override fun exists(accountName: AccountName): Boolean = helper.existsInMemory(accountName)
 
   override fun findByAccountName(accountName: AccountName): Pair<PasswordAuthentication, Version>?
-      = findByMemory(accountName)
+      = helper.findByMemory(accountName)
 
-  override fun save(accountName: AccountName, version: Version, vararg additionalEvents: PasswordAuthenticationEvent) = saveToMemory(accountName, version, *additionalEvents)
+  override fun save(accountName: AccountName, version: Version, vararg additionalEvents: PasswordAuthenticationEvent)
+      = helper.saveToMemory(accountName, version, *additionalEvents)
 
 }

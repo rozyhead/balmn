@@ -27,14 +27,14 @@ class RegisterUserAccountUsecaseTest {
 
     sut.execute(command)
 
-    assertThat(userAccountRepository.existsInMemory(accountName)).isTrue()
-    assertThat(passwordAuthenticationRepository.existsInMemory(accountName)).isTrue()
+    assertThat(userAccountRepository.exists(accountName)).isTrue()
+    assertThat(passwordAuthenticationRepository.exists(accountName)).isTrue()
   }
 
   @Test
   fun execute_when_account_already_exists() {
     val accountName = AccountName("test")
-    userAccountRepository.saveToMemory(accountName, Version.zero)
+    userAccountRepository.save(accountName, Version.zero)
 
     val plainPassword = PlainPassword("secret")
     val command = RegisterUserAccountUsecase.Command(accountName, plainPassword)

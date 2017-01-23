@@ -10,6 +10,8 @@ import com.github.rozyhead.balmn.util.ddd.Version
  */
 interface UserAccountRepository {
 
+  fun exists(accountName: AccountName): Boolean
+
   fun findByAccountName(accountName: AccountName): Pair<UserAccount, Version>?
 
   fun save(accountName: AccountName, version: Version, vararg additionalEvents: UserAccountEvent)

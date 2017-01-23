@@ -6,12 +6,13 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.CommentEvent
 import com.github.rozyhead.balmn.service.repository.CommentRepository
 import com.github.rozyhead.balmn.util.ddd.Version
 
-class InMemoryCommentRepository : CommentRepository, AbstractInMemoryRepository<CommentEvent, Comment, CommentId>() {
+class InMemoryCommentRepository : CommentRepository {
 
-  override val emptyEntity: Comment
-    get() = Comment()
+  val helper = InMemoryRepositoryHelper<CommentEvent, Comment, CommentId>(
+      emptyEntity = Comment()
+  )
 
   override fun save(commentId: CommentId, version: Version, vararg additionalEvents: CommentEvent)
-      = saveToMemory(commentId, version, *additionalEvents)
+      = helper.saveToMemory(commentId, version, *additionalEvents)
 
 }

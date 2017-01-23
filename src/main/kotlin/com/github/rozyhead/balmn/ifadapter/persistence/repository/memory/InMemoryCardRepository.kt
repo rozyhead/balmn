@@ -6,14 +6,16 @@ import com.github.rozyhead.balmn.domain.model.board.card.CardId
 import com.github.rozyhead.balmn.service.repository.CardRepository
 import com.github.rozyhead.balmn.util.ddd.Version
 
-class InMemoryCardRepository : CardRepository, AbstractInMemoryRepository<CardEvent, Card, CardId>() {
+class InMemoryCardRepository : CardRepository {
 
-  override val emptyEntity: Card
-    get() = Card()
+  val helper = InMemoryRepositoryHelper<CardEvent, Card, CardId>(
+      emptyEntity = Card()
+  )
 
-  override fun exists(cardId: CardId): Boolean = existsInMemory(cardId)
+  override fun exists(cardId: CardId): Boolean
+      = helper.existsInMemory(cardId)
 
   override fun save(cardId: CardId, version: Version, vararg additionalEvents: CardEvent)
-      = saveToMemory(cardId, version, *additionalEvents)
+      = helper.saveToMemory(cardId, version, *additionalEvents)
 
 }

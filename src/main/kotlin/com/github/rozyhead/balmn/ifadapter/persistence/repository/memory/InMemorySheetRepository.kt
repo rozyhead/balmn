@@ -6,13 +6,16 @@ import com.github.rozyhead.balmn.domain.model.board.sheet.SheetId
 import com.github.rozyhead.balmn.service.repository.SheetRepository
 import com.github.rozyhead.balmn.util.ddd.Version
 
-class InMemorySheetRepository : SheetRepository, AbstractInMemoryRepository<SheetEvent, Sheet, SheetId>() {
+class InMemorySheetRepository : SheetRepository {
 
-  override val emptyEntity: Sheet
-    get() = Sheet()
+  val helper = InMemoryRepositoryHelper<SheetEvent, Sheet, SheetId>(
+      emptyEntity = Sheet()
+  )
 
-  override fun findById(sheetId: SheetId): Pair<Sheet, Version>? = findByMemory(sheetId)
+  override fun findById(sheetId: SheetId): Pair<Sheet, Version>?
+      = helper.findByMemory(sheetId)
 
-  override fun save(sheetId: SheetId, version: Version, vararg additionalEvents: SheetEvent) = saveToMemory(sheetId, version, *additionalEvents)
+  override fun save(sheetId: SheetId, version: Version, vararg additionalEvents: SheetEvent)
+      = helper.saveToMemory(sheetId, version, *additionalEvents)
 
 }

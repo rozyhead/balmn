@@ -7,6 +7,8 @@ import com.github.rozyhead.balmn.util.ddd.Version
 
 interface PasswordAuthenticationRepository {
 
+  fun exists(accountName: AccountName): Boolean
+
   fun findByAccountName(accountName: AccountName): Pair<PasswordAuthentication, Version>?
 
   fun save(accountName: AccountName, version: Version, vararg additionalEvents: PasswordAuthenticationEvent)

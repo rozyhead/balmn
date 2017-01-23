@@ -4,9 +4,9 @@ import com.github.rozyhead.balmn.util.ddd.DomainEntity
 import com.github.rozyhead.balmn.util.ddd.DomainEvent
 import com.github.rozyhead.balmn.util.ddd.Version
 
-abstract class AbstractInMemoryRepository<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, ID> {
-
-  abstract val emptyEntity: ENTITY
+class InMemoryRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, ID>(
+    val emptyEntity: ENTITY
+) {
 
   val events = mutableMapOf<ID, List<EVENT>>()
 

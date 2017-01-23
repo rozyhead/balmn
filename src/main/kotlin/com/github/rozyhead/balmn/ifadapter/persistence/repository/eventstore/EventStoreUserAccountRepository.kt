@@ -7,25 +7,23 @@ import com.github.rozyhead.balmn.infrastructure.eventstore.EventStore
 import com.github.rozyhead.balmn.service.repository.UserAccountRepository
 import com.github.rozyhead.balmn.util.ddd.Version
 import org.springframework.stereotype.Repository
-import kotlin.reflect.KClass
 
 @Repository
-class EventStoreUserAccountRepository(
-    eventStore: EventStore
-) : UserAccountRepository, AbstractEventStoreRepository<UserAccountEvent, UserAccount, AccountName>(eventStore) {
+class EventStoreUserAccountRepository(eventStore: EventStore) : UserAccountRepository {
 
-  override val eventClass: KClass<UserAccountEvent>
-    get() = UserAccountEvent::class
+  val helper = EventStoreRepositoryHelper<UserAccountEvent, UserAccount, AccountName>(
+      eventStore = eventStore,
+      eventClass = UserAccountEvent::class,
+      emptyEntity = UserAccount(),
+      streamIdOf = { "UserAccount(${it.value}" }
+  )
 
-  override val emptyEntity: UserAccount
-    get() = UserAccount()
-
-  override fun streamIdOf(entityId: AccountName): String = "UserAccount(${entityId.value})"
+  override fun exists(accountName: AccountName): Boolean = helper.existsInStore(accountName)
 
   override fun findByAccountName(accountName: AccountName): Pair<UserAccount, Version>?
-      = findByStore(accountName)
+      = helper.findByStore(accountName)
 
   override fun save(accountName: AccountName, version: Version, vararg additionalEvents: UserAccountEvent)
-      = saveToStore(accountName, version, *additionalEvents)
+      = helper.saveToStore(accountName, version, *additionalEvents)
 
 }

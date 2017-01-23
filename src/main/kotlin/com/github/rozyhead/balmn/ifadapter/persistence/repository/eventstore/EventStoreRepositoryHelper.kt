@@ -6,14 +6,12 @@ import com.github.rozyhead.balmn.util.ddd.DomainEvent
 import com.github.rozyhead.balmn.util.ddd.Version
 import kotlin.reflect.KClass
 
-abstract class AbstractEventStoreRepository<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, ID>(
-    val eventStore: EventStore
+class EventStoreRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, in ID>(
+    val eventStore: EventStore,
+    val eventClass: KClass<EVENT>,
+    val emptyEntity: ENTITY,
+    val streamIdOf: (ID) -> String
 ) {
-
-  abstract val eventClass: KClass<EVENT>
-  abstract val emptyEntity: ENTITY
-
-  abstract fun streamIdOf(entityId: ID): String
 
   fun existsInStore(entityId: ID): Boolean = eventStore.exists(streamIdOf(entityId))
 

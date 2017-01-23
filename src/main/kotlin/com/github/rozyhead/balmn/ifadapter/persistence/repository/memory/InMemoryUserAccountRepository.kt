@@ -6,13 +6,18 @@ import com.github.rozyhead.balmn.domain.model.account.user.UserAccountEvent
 import com.github.rozyhead.balmn.service.repository.UserAccountRepository
 import com.github.rozyhead.balmn.util.ddd.Version
 
-class InMemoryUserAccountRepository : UserAccountRepository, AbstractInMemoryRepository<UserAccountEvent, UserAccount, AccountName>() {
+class InMemoryUserAccountRepository : UserAccountRepository {
 
-  override val emptyEntity: UserAccount
-    get() = UserAccount()
+  val helper = InMemoryRepositoryHelper<UserAccountEvent, UserAccount, AccountName>(
+      emptyEntity = UserAccount()
+  )
 
-  override fun findByAccountName(accountName: AccountName): Pair<UserAccount, Version>? = findByMemory(accountName)
+  override fun exists(accountName: AccountName): Boolean = helper.existsInMemory(accountName)
 
-  override fun save(accountName: AccountName, version: Version, vararg additionalEvents: UserAccountEvent) = saveToMemory(accountName, version, *additionalEvents)
+  override fun findByAccountName(accountName: AccountName): Pair<UserAccount, Version>?
+      = helper.findByMemory(accountName)
+
+  override fun save(accountName: AccountName, version: Version, vararg additionalEvents: UserAccountEvent)
+      = helper.saveToMemory(accountName, version, *additionalEvents)
 
 }
