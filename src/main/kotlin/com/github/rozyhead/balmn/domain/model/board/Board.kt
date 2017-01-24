@@ -17,17 +17,17 @@ data class Board(
     }
   }
 
-  fun allowSheetAdditionByUser(userAccount: UserAccount): Boolean {
+  fun allowSheetAdditionByUser(@Suppress("UNUSED_PARAMETER") userAccount: UserAccount): Boolean {
     // TODO
     return true
   }
 
-  fun allowCardAdditionByUser(userAccount: UserAccount): Boolean {
+  fun allowCardAdditionByUser(@Suppress("UNUSED_PARAMETER") userAccount: UserAccount): Boolean {
     // TODO
     return true
   }
 
-  fun allowCommentAdditionByUser(userAccount: UserAccount): Boolean {
+  fun allowCommentAdditionByUser(@Suppress("UNUSED_PARAMETER") userAccount: UserAccount): Boolean {
     // TODO
     return true
   }

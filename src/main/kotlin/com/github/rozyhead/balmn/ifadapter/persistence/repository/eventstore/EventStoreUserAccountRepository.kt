@@ -6,9 +6,7 @@ import com.github.rozyhead.balmn.domain.model.account.user.UserAccountEvent
 import com.github.rozyhead.balmn.infrastructure.eventstore.EventStore
 import com.github.rozyhead.balmn.service.repository.UserAccountRepository
 import com.github.rozyhead.balmn.util.ddd.Version
-import org.springframework.stereotype.Repository
 
-@Repository
 class EventStoreUserAccountRepository(eventStore: EventStore) : UserAccountRepository {
 
   val helper = EventStoreRepositoryHelper<UserAccountEvent, UserAccount, AccountName>(

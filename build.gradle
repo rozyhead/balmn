@@ -4,14 +4,16 @@ buildscript {
     kotlinVersion = '1.0.6'
     jacksonVersion = '2.8.5'
     exposedVersion = '0.7.4'
+    rxjavaVersion = '1.2.5'
+    rxkotlinVersion = '0.60.0'
   }
   repositories {
     mavenCentral()
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
-    classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}"
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+    classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
   }
 }
 
@@ -47,6 +49,9 @@ dependencies {
 
   compile("org.jetbrains.exposed:exposed:${exposedVersion}")
   compile("org.jetbrains.exposed:spring-transaction:${exposedVersion}")
+
+  compile("io.reactivex:rxjava:${rxjavaVersion}")
+  compile("io.reactivex:rxkotlin:${rxkotlinVersion}")
 
   runtime('com.h2database:h2')
 }

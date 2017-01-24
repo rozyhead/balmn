@@ -8,6 +8,6 @@ interface EventStore {
 
   fun events(streamId: String): List<DomainEvent>?
 
-  fun batchAppend(streamId: String, version: Long, events: Iterable<DomainEvent>)
+  fun batchAppend(streamId: String, version: Long, events: List<DomainEvent>)
 
 }
