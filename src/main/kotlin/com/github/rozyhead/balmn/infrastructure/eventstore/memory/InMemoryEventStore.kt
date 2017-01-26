@@ -1,37 +1,85 @@
 package com.github.rozyhead.balmn.infrastructure.eventstore.memory
 
+import com.github.rozyhead.balmn.infrastructure.eventstore.EventMessage
 import com.github.rozyhead.balmn.infrastructure.eventstore.EventStore
-import com.github.rozyhead.balmn.util.ddd.DomainEvent
+import com.github.rozyhead.balmn.infrastructure.eventstore.ReadProjection
+import rx.Observable
+import rx.lang.kotlin.PublishSubject
+import rx.lang.kotlin.synchronized
+import rx.lang.kotlin.toObservable
+import java.time.Clock
+import java.time.LocalDateTime
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
-class InMemoryEventStore : EventStore {
+class InMemoryEventStore : EventStore, ReadProjection {
 
-  val events = mutableListOf<Pair<String, DomainEvent>>()
-  val subscribers = mutableListOf<(String, DomainEvent) -> Unit>()
+  private val lock = ReentrantReadWriteLock()
+  private val readLock = lock.readLock()
+  private val writeLock = lock.writeLock()
 
-  fun subscribe(subscriber: (String, DomainEvent) -> Unit): () -> Unit {
-    this.subscribers += subscriber
-    return { this.subscribers -= subscriber }
+  private val eventMessages = mutableListOf<EventMessage>()
+  private val subject = PublishSubject<EventMessage>().synchronized()
+
+  override fun exists(streamId: String): Boolean = withReadLock {
+    this.eventMessages.find { it.streamId == streamId } != null
   }
 
-  fun publish(streamId: String, event: DomainEvent) {
-    subscribers.forEach { it(streamId, event) }
+  override fun eventMessages(streamId: String): List<EventMessage>? = withReadLock {
+    val events = this.eventMessages.filter { it.streamId == streamId }
+    if (events.isNotEmpty()) events else null
   }
 
-  override fun exists(streamId: String): Boolean {
-    return this.events.find { it.first == streamId } != null
+  override fun batchAppend(streamId: String, version: Long, events: List<Any>) {
+    val savedMessages = withWriteLock {
+      val oldMessages = this.eventMessages(streamId)
+      require(oldMessages == null || oldMessages.last().version == version, { "Stream streamVersion conflicts" })
+
+      var eventId = this.eventMessages.last().eventId
+      var eventVersion = version
+      val messages = events.map {
+        EventMessage(++eventId, streamId, ++eventVersion, it, LocalDateTime.now())
+      }
+
+      this.eventMessages.addAll(messages)
+
+      messages
+    }
+
+    savedMessages.forEach { this.subject.onNext(it) }
   }
 
-  override fun events(streamId: String): List<DomainEvent>? {
-    val events = this.events.filter { it.first == streamId }.map { it.second }
-    return if (events.isNotEmpty()) events else null
+  override fun allStreams(): Observable<EventMessage> = withReadLock {
+    Observable.concat(currentAllStreams(), subject.asObservable())
   }
 
-  override fun batchAppend(streamId: String, version: Long, events: List<DomainEvent>) {
-    val oldEvents = this.events(streamId)
-    require(oldEvents == null || oldEvents.size.toLong() == version, { "Stream version conflicts" })
+  override fun currentAllStreams(): Observable<EventMessage> = withReadLock {
+    eventMessages.toObservable()
+  }
 
-    this.events.addAll(events.map { Pair(streamId, it) })
-    events.forEach { this.publish(streamId, it) }
+  override fun streamById(streamId: String): Observable<EventMessage> = withReadLock {
+    Observable.concat(currentStreamById(streamId), subject.asObservable())
+  }
+
+  override fun currentStreamById(streamId: String): Observable<EventMessage> = withReadLock {
+    eventMessages.filter { it.streamId == streamId }.toObservable()
+  }
+
+  private fun <R> withReadLock(action: () -> R): R {
+    readLock.lock()
+    try {
+      return action()
+    } finally {
+      readLock.unlock()
+    }
+  }
+
+  private fun <R> withWriteLock(action: () -> R): R {
+    writeLock.lock()
+    try {
+      return action()
+    } finally {
+      writeLock.unlock()
+    }
   }
 
 }

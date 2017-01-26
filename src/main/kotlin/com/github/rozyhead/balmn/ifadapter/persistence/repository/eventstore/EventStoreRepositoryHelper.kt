@@ -16,7 +16,7 @@ class EventStoreRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<
   fun existsInStore(entityId: ID): Boolean = eventStore.exists(streamIdOf(entityId))
 
   fun findByStore(entityId: ID): Pair<ENTITY, Version>? {
-    val events = eventStore.events(streamIdOf(entityId))?.map { eventClass.java.cast(it) } ?: return null
+    val events = eventStore.eventMessages(streamIdOf(entityId))?.map { eventClass.java.cast(it.payload) } ?: return null
     val entity = events.fold(emptyEntity, { entity, event -> entity apply event })
     return Pair(entity, Version(events.size.toLong()))
   }
