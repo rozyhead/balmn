@@ -3,7 +3,8 @@ package com.github.rozyhead.balmn.infrastructure.eventstore.jdbc
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.rozyhead.balmn.infrastructure.eventstore.EventMessage
 import com.github.rozyhead.balmn.infrastructure.eventstore.EventStore
-import org.jetbrains.exposed.sql.Table
+import com.github.rozyhead.balmn.infrastructure.eventstore.jdbc.tables.EventMessages
+import com.github.rozyhead.balmn.infrastructure.eventstore.jdbc.tables.StreamVersions
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
@@ -12,20 +13,6 @@ import java.time.LocalDateTime
 
 fun jodaTimeToJavaTime(dateTime: DateTime): LocalDateTime {
   return LocalDateTime.from(dateTime.toDate().toInstant())
-}
-
-object StreamVersions : Table("stream_versions") {
-  val streamId = varchar("stream_id", 255)
-  val streamVersion = long("stream_version")
-}
-
-object EventMessages : Table("event_messages") {
-  val eventId = long("eventId").primaryKey()
-  val streamId = varchar("stream_id", 255) references StreamVersions.streamId
-  val streamVersion = long("stream_version")
-  val eventType = varchar("event_type", 255)
-  val payload = text("payload")
-  val createdAt = datetime("created_at")
 }
 
 class JdbcEventStore(
