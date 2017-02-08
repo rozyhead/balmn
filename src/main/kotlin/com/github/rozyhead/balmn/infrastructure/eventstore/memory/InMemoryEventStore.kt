@@ -7,7 +7,6 @@ import rx.Observable
 import rx.lang.kotlin.PublishSubject
 import rx.lang.kotlin.synchronized
 import rx.lang.kotlin.toObservable
-import java.time.Clock
 import java.time.LocalDateTime
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
