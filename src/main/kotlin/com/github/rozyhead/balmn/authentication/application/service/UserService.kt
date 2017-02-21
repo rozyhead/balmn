@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.authentication.application.usecase
+package com.github.rozyhead.balmn.authentication.application.service
 
 import com.github.rozyhead.balmn.authentication.application.exception.UserOperationException
 import com.github.rozyhead.balmn.authentication.application.index.UserNameIndex
@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class RegisterPasswordAuthenticationUser(
+class UserService(
     val userNameIndex: UserNameIndex,
     val userRepository: UserRepository
 ) {
 
-  data class Command(
+  data class RegisterPasswordAuthenticationUserCommand(
       val userName: UserName,
       val plainPassword: PlainPassword
   )
 
   @Transactional
   @Throws(UserOperationException::class)
-  fun execute(command: Command) {
+  fun registerPasswordAuthenticationUser(command: RegisterPasswordAuthenticationUserCommand) {
     val (userName, plainPassword) = command
     if (userNameIndex.exists(userName)) {
       throw UserOperationException.userNameAlreadyUsed(userName)

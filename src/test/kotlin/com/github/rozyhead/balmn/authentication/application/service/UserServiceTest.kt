@@ -1,33 +1,29 @@
-package com.github.rozyhead.balmn.authentication.application.usecase
+package com.github.rozyhead.balmn.authentication.application.service
 
-import com.github.rozyhead.balmn.account.application.exception.AccountOperationException
-import com.github.rozyhead.balmn.account.application.usecase.RegisterUserAccountUsecase
-import com.github.rozyhead.balmn.account.domain.model.AccountName
 import com.github.rozyhead.balmn.authentication.application.exception.UserOperationException
 import com.github.rozyhead.balmn.authentication.domain.model.UserId
 import com.github.rozyhead.balmn.authentication.domain.model.UserName
 import com.github.rozyhead.balmn.authentication.domain.model.password.PlainPassword
 import com.github.rozyhead.balmn.authentication.port.adapter.index.memory.InMemoryUserNameIndex
 import com.github.rozyhead.balmn.authentication.port.adapter.repository.memory.InMemoryUserRepository
-import com.github.rozyhead.balmn.common.domain.model.Version
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Test
 
-class RegisterPasswordAuthenticationUserTest {
+class UserServiceTest {
 
   val userNameIndex = InMemoryUserNameIndex()
   val userRepository = InMemoryUserRepository()
 
-  val sut = RegisterPasswordAuthenticationUser(userNameIndex, userRepository)
+  val sut = UserService(userNameIndex, userRepository)
 
   @Test
   fun execute() {
     val userName = UserName("test")
     val plainPassword = PlainPassword("secret")
-    val command = RegisterPasswordAuthenticationUser.Command(userName, plainPassword)
+    val command = UserService.RegisterPasswordAuthenticationUserCommand(userName, plainPassword)
 
-    sut.execute(command)
+    sut.registerPasswordAuthenticationUser(command)
 
     assertThat(userNameIndex.exists(userName)).isTrue()
 
@@ -44,9 +40,9 @@ class RegisterPasswordAuthenticationUserTest {
     userNameIndex.save(userName, UserId.generate())
 
     val plainPassword = PlainPassword("secret")
-    val command = RegisterPasswordAuthenticationUser.Command(userName, plainPassword)
+    val command = UserService.RegisterPasswordAuthenticationUserCommand(userName, plainPassword)
 
-    assertThatThrownBy { sut.execute(command) }
+    assertThatThrownBy { sut.registerPasswordAuthenticationUser(command) }
         .isInstanceOf(UserOperationException.UserNameAlreadyUsedException::class.java)
   }
 

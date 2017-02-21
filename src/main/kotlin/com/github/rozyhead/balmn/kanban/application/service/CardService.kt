@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.kanban.application.usecase
+package com.github.rozyhead.balmn.kanban.application.service
 
 import com.github.rozyhead.balmn.common.domain.model.Version
 import com.github.rozyhead.balmn.kanban.application.exception.BoardOperationException
@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class AddCardUsacase(
+class CardService(
     val boardOwnerService: BoardOwnerService,
     val boardRepository: BoardRepository,
     val sheetRepository: SheetRepository,
     val cardRepository: CardRepository
 ) {
 
-  data class Command(
+  data class AddCardCommand(
       val sheetId: SheetId,
       val cardTitle: CardTitle,
       val requestedBy: UserId
@@ -28,7 +28,7 @@ class AddCardUsacase(
 
   @Transactional
   @Throws(BoardOperationException::class)
-  fun execute(command: Command) {
+  fun addCard(command: AddCardCommand) {
     val (sheetId, cardTitle, requestedBy) = command
 
     val (sheet) = sheetRepository.find(sheetId)

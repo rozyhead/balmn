@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.kanban.application.usecase
+package com.github.rozyhead.balmn.kanban.application.service
 
 import com.github.rozyhead.balmn.common.domain.model.Version
 import com.github.rozyhead.balmn.kanban.application.exception.BoardOperationException
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class AddCommentUsacase(
+class CommentService(
     val boardOwnerService: BoardOwnerService,
     val boardRepository: BoardRepository,
     val sheetRepository: SheetRepository,
@@ -22,7 +22,7 @@ class AddCommentUsacase(
     val commentRepository: CommentRepository
 ) {
 
-  data class Command(
+  data class AddCommentCommand(
       val cardId: CardId,
       val commentContent: CommentContent,
       val requestedBy: UserId
@@ -30,7 +30,7 @@ class AddCommentUsacase(
 
   @Transactional
   @Throws(BoardOperationException::class)
-  fun execute(command: Command) {
+  fun addComment(command: AddCommentCommand) {
     val (cardId, commentContent, requestedBy) = command
 
     val (card) = cardRepository.find(cardId)
