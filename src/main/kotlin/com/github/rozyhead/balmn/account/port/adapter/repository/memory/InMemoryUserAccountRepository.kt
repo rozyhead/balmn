@@ -1,7 +1,7 @@
 package com.github.rozyhead.balmn.account.port.adapter.repository.memory
 
 import com.github.rozyhead.balmn.account.application.repository.UserAccountRepository
-import com.github.rozyhead.balmn.account.domain.model.AccountName
+import com.github.rozyhead.balmn.account.domain.model.AccountId
 import com.github.rozyhead.balmn.account.domain.model.user.UserAccount
 import com.github.rozyhead.balmn.account.domain.model.user.UserAccountEvent
 import com.github.rozyhead.balmn.common.domain.model.Version
@@ -9,16 +9,16 @@ import com.github.rozyhead.balmn.common.port.adapter.repository.memory.InMemoryR
 
 class InMemoryUserAccountRepository : UserAccountRepository {
 
-  val helper = InMemoryRepositoryHelper<UserAccountEvent, UserAccount, AccountName>(
+  val helper = InMemoryRepositoryHelper<UserAccountEvent, UserAccount, AccountId>(
       emptyEntity = UserAccount()
   )
 
-  override fun exists(accountName: AccountName): Boolean = helper.existsInMemory(accountName)
+  override fun exists(id: AccountId): Boolean = helper.existsInMemory(id)
 
-  override fun findByAccountName(accountName: AccountName): Pair<UserAccount, Version>?
-      = helper.findByMemory(accountName)
+  override fun find(id: AccountId): Pair<UserAccount, Version>?
+      = helper.findByMemory(id)
 
-  override fun save(accountName: AccountName, version: Version, vararg additionalEvents: UserAccountEvent)
-      = helper.saveToMemory(accountName, version, *additionalEvents)
+  override fun save(id: AccountId, version: Version, vararg additionalEvents: UserAccountEvent)
+      = helper.saveToMemory(id, version, *additionalEvents)
 
 }

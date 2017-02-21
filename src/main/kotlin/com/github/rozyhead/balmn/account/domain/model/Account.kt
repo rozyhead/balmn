@@ -1,7 +1,7 @@
 package com.github.rozyhead.balmn.account.domain.model
 
 interface Account {
+  val id: AccountId
   val accountName: AccountName
-
-  fun allowBoardCreationForUser(accountName: AccountName): Boolean
+  val type: AccountType
 }
