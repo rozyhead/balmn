@@ -9,8 +9,4 @@ interface UserNameIndex {
 
   fun find(userName: UserName): UserId?
 
-  fun save(userName: UserName, userId: UserId)
-
-  fun delete(userName: UserName)
-
 }

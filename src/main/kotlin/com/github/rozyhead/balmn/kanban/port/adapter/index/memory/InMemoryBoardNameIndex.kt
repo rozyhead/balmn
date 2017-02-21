@@ -19,15 +19,15 @@ class InMemoryBoardNameIndex : BoardNameIndex {
     return index[Pair(boardOwner, boardName)]
   }
 
-  override fun save(boardOwner: BoardOwner, boardName: BoardName, boardId: BoardId) {
+  fun save(boardOwner: BoardOwner, boardName: BoardName, boardId: BoardId) {
     index += Pair(Pair(boardOwner, boardName), boardId)
   }
 
-  override fun delete(boardOwner: BoardOwner, boardName: BoardName) {
+  fun delete(boardOwner: BoardOwner, boardName: BoardName) {
     index = index.filterKeys { it != Pair(boardOwner, boardName) }
   }
 
-  override fun delete(boardOwner: BoardOwner) {
+  fun delete(boardOwner: BoardOwner) {
     index = index.filterKeys { it.first != boardOwner }
   }
 

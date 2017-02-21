@@ -10,8 +10,4 @@ interface AccountNameIndex {
 
   fun find(accountName: AccountName): Pair<AccountId, AccountType>?
 
-  fun save(accountName: AccountName, accountId: AccountId, accountType: AccountType)
-
-  fun delete(accountName: AccountName)
-
 }

@@ -10,10 +10,4 @@ interface BoardNameIndex {
 
   fun find(boardOwner: BoardOwner, boardName: BoardName): BoardId?
 
-  fun save(boardOwner: BoardOwner, boardName: BoardName, boardId: BoardId)
-
-  fun delete(boardOwner: BoardOwner, boardName: BoardName)
-
-  fun delete(boardOwner: BoardOwner)
-
 }

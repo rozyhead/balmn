@@ -9,6 +9,7 @@ import com.github.rozyhead.balmn.kanban.domain.model.UserId
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardName
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwner
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwnerService
+import com.github.rozyhead.balmn.kanban.domain.model.sheet.SheetId
 import com.github.rozyhead.balmn.kanban.domain.model.sheet.SheetName
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -30,7 +31,7 @@ class SheetService(
 
   @Transactional
   @Throws(BoardOperationException::class)
-  fun addSheet(command: AddSheetCommand) {
+  fun addSheet(command: AddSheetCommand): SheetId {
     val (boardOwner, boardName, sheetName, requestedBy) = command
 
     val boardId = boardNameIndex.find(boardOwner, boardName)
@@ -45,6 +46,8 @@ class SheetService(
 
     val (sheet, sheetEvent) = board.addSheet(sheetName, requestedBy)
     sheetRepository.save(sheet.id, Version.zero, sheetEvent)
+
+    return sheet.id
   }
 
 }

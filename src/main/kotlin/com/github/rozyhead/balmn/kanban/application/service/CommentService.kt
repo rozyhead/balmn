@@ -10,6 +10,7 @@ import com.github.rozyhead.balmn.kanban.domain.model.UserId
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwnerService
 import com.github.rozyhead.balmn.kanban.domain.model.card.CardId
 import com.github.rozyhead.balmn.kanban.domain.model.comment.CommentContent
+import com.github.rozyhead.balmn.kanban.domain.model.comment.CommentId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -30,7 +31,7 @@ class CommentService(
 
   @Transactional
   @Throws(BoardOperationException::class)
-  fun addComment(command: AddCommentCommand) {
+  fun addComment(command: AddCommentCommand): CommentId {
     val (cardId, commentContent, requestedBy) = command
 
     val (card) = cardRepository.find(cardId)
@@ -48,6 +49,8 @@ class CommentService(
 
     val (comment, commentEvent) = card.addComment(commentContent, requestedBy)
     commentRepository.save(comment.id, Version.zero, commentEvent)
+
+    return comment.id
   }
 
 }

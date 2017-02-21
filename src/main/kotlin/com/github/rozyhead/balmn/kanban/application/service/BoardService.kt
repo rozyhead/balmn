@@ -5,10 +5,7 @@ import com.github.rozyhead.balmn.kanban.application.exception.BoardOperationExce
 import com.github.rozyhead.balmn.kanban.application.index.BoardNameIndex
 import com.github.rozyhead.balmn.kanban.application.repository.BoardRepository
 import com.github.rozyhead.balmn.kanban.domain.model.UserId
-import com.github.rozyhead.balmn.kanban.domain.model.board.Board
-import com.github.rozyhead.balmn.kanban.domain.model.board.BoardName
-import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwner
-import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwnerService
+import com.github.rozyhead.balmn.kanban.domain.model.board.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -27,7 +24,7 @@ class BoardService(
 
   @Transactional
   @Throws(BoardOperationException::class)
-  fun createNewBoard(command: CreateNewBoardCommand) {
+  fun createNewBoard(command: CreateNewBoardCommand): BoardId {
     val (boardOwner, boardName, requestedBy) = command
 
     if (!boardOwnerService.exists(boardOwner)) {
@@ -44,7 +41,8 @@ class BoardService(
 
     val (board, boardEvent) = Board.create(boardOwner, boardName, requestedBy)
     boardRepository.save(board.id, Version.zero, boardEvent)
-    boardNameIndex.save(board.owner, board.name, board.id)
+
+    return board.id
   }
 
 }

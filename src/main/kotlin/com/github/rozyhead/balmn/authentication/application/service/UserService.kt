@@ -4,6 +4,7 @@ import com.github.rozyhead.balmn.authentication.application.exception.UserOperat
 import com.github.rozyhead.balmn.authentication.application.index.UserNameIndex
 import com.github.rozyhead.balmn.authentication.application.repository.UserRepository
 import com.github.rozyhead.balmn.authentication.domain.model.User
+import com.github.rozyhead.balmn.authentication.domain.model.UserId
 import com.github.rozyhead.balmn.authentication.domain.model.UserName
 import com.github.rozyhead.balmn.authentication.domain.model.password.PasswordAuthentication
 import com.github.rozyhead.balmn.authentication.domain.model.password.PlainPassword
@@ -24,7 +25,7 @@ class UserService(
 
   @Transactional
   @Throws(UserOperationException::class)
-  fun registerPasswordAuthenticationUser(command: RegisterPasswordAuthenticationUserCommand) {
+  fun registerPasswordAuthenticationUser(command: RegisterPasswordAuthenticationUserCommand): UserId {
     val (userName, plainPassword) = command
     if (userNameIndex.exists(userName)) {
       throw UserOperationException.userNameAlreadyUsed(userName)
@@ -34,7 +35,8 @@ class UserService(
     val (user, userEvent) = User.create(userName, passwordAuthentication)
 
     userRepository.save(user.id, Version.zero, userEvent)
-    userNameIndex.save(user.name, user.id)
+
+    return user.id
   }
 
 }

@@ -19,11 +19,11 @@ class InMemoryAccountNameIndex : AccountNameIndex {
     return index[accountName]
   }
 
-  override fun save(accountName: AccountName, accountId: AccountId, accountType: AccountType) {
+  fun save(accountName: AccountName, accountId: AccountId, accountType: AccountType) {
     index[accountName] = Pair(accountId, accountType)
   }
 
-  override fun delete(accountName: AccountName) {
+  fun delete(accountName: AccountName) {
     index.remove(accountName)
   }
 

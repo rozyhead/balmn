@@ -7,6 +7,7 @@ import com.github.rozyhead.balmn.kanban.application.repository.CardRepository
 import com.github.rozyhead.balmn.kanban.application.repository.SheetRepository
 import com.github.rozyhead.balmn.kanban.domain.model.UserId
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwnerService
+import com.github.rozyhead.balmn.kanban.domain.model.card.CardId
 import com.github.rozyhead.balmn.kanban.domain.model.card.CardTitle
 import com.github.rozyhead.balmn.kanban.domain.model.sheet.SheetId
 import org.springframework.stereotype.Service
@@ -28,7 +29,7 @@ class CardService(
 
   @Transactional
   @Throws(BoardOperationException::class)
-  fun addCard(command: AddCardCommand) {
+  fun addCard(command: AddCardCommand): CardId {
     val (sheetId, cardTitle, requestedBy) = command
 
     val (sheet) = sheetRepository.find(sheetId)
@@ -43,6 +44,8 @@ class CardService(
 
     val (card, cardEvent) = sheet.addCard(cardTitle, requestedBy)
     cardRepository.save(card.id, Version.zero, cardEvent)
+
+    return card.id
   }
 
 }

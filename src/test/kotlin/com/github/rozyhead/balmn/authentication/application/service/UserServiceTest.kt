@@ -18,16 +18,12 @@ class UserServiceTest {
   val sut = UserService(userNameIndex, userRepository)
 
   @Test
-  fun execute() {
+  fun registerPasswordAuthenticationUser() {
     val userName = UserName("test")
     val plainPassword = PlainPassword("secret")
     val command = UserService.RegisterPasswordAuthenticationUserCommand(userName, plainPassword)
 
-    sut.registerPasswordAuthenticationUser(command)
-
-    assertThat(userNameIndex.exists(userName)).isTrue()
-
-    val userId = userNameIndex.find(userName)!!
+    val userId = sut.registerPasswordAuthenticationUser(command)
     assertThat(userRepository.exists(userId)).isTrue()
 
     val (user) = userRepository.find(userId)!!
@@ -35,7 +31,7 @@ class UserServiceTest {
   }
 
   @Test
-  fun execute_when_account_already_exists() {
+  fun registerPasswordAuthenticationUser_when_account_already_exists() {
     val userName = UserName("test")
     userNameIndex.save(userName, UserId.generate())
 

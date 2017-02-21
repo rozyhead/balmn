@@ -18,11 +18,11 @@ class InMemoryUserNameIndex : UserNameIndex {
     return map[userName]
   }
 
-  override fun save(userName: UserName, userId: UserId) {
+  fun save(userName: UserName, userId: UserId) {
     map[userName] = userId
   }
 
-  override fun delete(userName: UserName) {
+  fun delete(userName: UserName) {
     map.remove(userName)
   }
 
