@@ -1,5 +1,6 @@
 package com.github.rozyhead.balmn.infrastructure.eventstore.memory
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.rozyhead.balmn.infrastructure.eventstore.EventMessage
 import com.github.rozyhead.balmn.infrastructure.eventstore.EventStore
 import com.github.rozyhead.balmn.infrastructure.eventstore.ReadProjection
@@ -7,10 +8,12 @@ import rx.Observable
 import rx.lang.kotlin.PublishSubject
 import rx.lang.kotlin.synchronized
 import rx.lang.kotlin.toObservable
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
-class InMemoryEventStore : EventStore, ReadProjection {
+class InMemoryEventStore(
+    val objectMapper: ObjectMapper
+) : EventStore, ReadProjection {
 
   private val lock = ReentrantReadWriteLock()
   private val readLock = lock.readLock()
@@ -36,7 +39,14 @@ class InMemoryEventStore : EventStore, ReadProjection {
       var eventId = this.eventMessages.last().eventId
       var eventVersion = version
       val messages = events.map {
-        EventMessage(++eventId, streamId, ++eventVersion, it, LocalDateTime.now())
+        EventMessage(
+            ++eventId,
+            streamId,
+            ++eventVersion,
+            it.javaClass.name,
+            objectMapper.writeValueAsString(it),
+            OffsetDateTime.now()
+        )
       }
 
       this.eventMessages.addAll(messages)

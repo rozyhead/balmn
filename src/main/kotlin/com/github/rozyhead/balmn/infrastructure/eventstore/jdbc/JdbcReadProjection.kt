@@ -82,15 +82,12 @@ class JdbcReadProjection(
   }
 
   private fun toEventMessage(row: ResultRow): EventMessage {
-    val eventType = row[EventMessages.eventType]
-    val eventClass = Class.forName(eventType)
-    val payload = objectMapper.readValue(row[EventMessages.payload], eventClass)
-
     return EventMessage(
         eventId = row[EventMessages.eventId],
         streamId = row[EventMessages.streamId],
         version = row[EventMessages.streamVersion],
-        payload = payload,
+        eventType = row[EventMessages.eventType],
+        payload = row[EventMessages.payload],
         createdAt = jodaTimeToJavaTime(row[EventMessages.createdAt])
     )
   }

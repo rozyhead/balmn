@@ -10,9 +10,10 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
-fun jodaTimeToJavaTime(dateTime: DateTime): LocalDateTime {
-  return LocalDateTime.from(dateTime.toDate().toInstant())
+fun jodaTimeToJavaTime(dateTime: DateTime): OffsetDateTime {
+  return OffsetDateTime.from(dateTime.toDate().toInstant())
 }
 
 class JdbcEventStore(
@@ -25,16 +26,14 @@ class JdbcEventStore(
 
   override fun eventMessages(streamId: String): List<EventMessage>? {
     return EventMessages.select { EventMessages.streamId eq streamId }.orderBy(EventMessages.eventId).map {
-      val eventId = it[EventMessages.eventId]
-      val streamVersion = it[EventMessages.streamVersion]
-      val eventType = it[EventMessages.eventType]
-      val payloadText = it[EventMessages.payload]
-      val createdAt = it[EventMessages.createdAt]
-
-      val eventClass = Class.forName(eventType)
-      val payload = objectMapper.readValue(payloadText, eventClass)
-
-      EventMessage(eventId, streamId, streamVersion, payload, jodaTimeToJavaTime(createdAt))
+      EventMessage(
+          eventId = it[EventMessages.eventId],
+          streamId = it[EventMessages.streamId],
+          version = it[EventMessages.streamVersion],
+          eventType = it[EventMessages.eventType],
+          payload = it[EventMessages.payload],
+          createdAt = jodaTimeToJavaTime(it[EventMessages.createdAt])
+      )
     }
   }
 
