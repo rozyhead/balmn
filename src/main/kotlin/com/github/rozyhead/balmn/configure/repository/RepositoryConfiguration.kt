@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.infrastructure.configure
+package com.github.rozyhead.balmn.configure.repository
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Configuration

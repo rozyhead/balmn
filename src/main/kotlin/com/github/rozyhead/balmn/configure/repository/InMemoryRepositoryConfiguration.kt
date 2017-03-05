@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.infrastructure.configure
+package com.github.rozyhead.balmn.configure.repository
 
 import com.github.rozyhead.balmn.account.port.adapter.repository.memory.InMemoryUserAccountRepository
 import com.github.rozyhead.balmn.authentication.port.adapter.repository.memory.InMemoryUserRepository
