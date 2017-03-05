@@ -13,9 +13,6 @@ class InMemoryCommentRepository : CommentRepository {
       emptyEntity = Comment()
   )
 
-  override fun exists(id: CommentId): Boolean
-      = helper.existsInMemory(id)
-
   override fun find(id: CommentId): Pair<Comment, Version>?
       = helper.findByMemory(id)
 

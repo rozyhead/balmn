@@ -1,28 +1,42 @@
 package com.github.rozyhead.balmn.common.port.adapter.repository.eventstore
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.msemys.esjc.EventData
+import com.github.msemys.esjc.EventStore
+import com.github.msemys.esjc.ExpectedVersion
 import com.github.rozyhead.balmn.common.domain.model.DomainEntity
 import com.github.rozyhead.balmn.common.domain.model.DomainEvent
 import com.github.rozyhead.balmn.common.domain.model.Version
-import com.github.rozyhead.balmn.infrastructure.eventstore.EventStore
-import kotlin.reflect.KClass
+import java.util.concurrent.CompletableFuture
 
 class EventStoreRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, in ID>(
     val eventStore: EventStore,
-    val eventClass: KClass<EVENT>,
+    val objectMapper: ObjectMapper,
     val emptyEntity: ENTITY,
     val streamIdOf: (ID) -> String
 ) {
 
-  fun existsInStore(entityId: ID): Boolean = eventStore.exists(streamIdOf(entityId))
-
   fun findByStore(entityId: ID): Pair<ENTITY, Version>? {
-    val events = eventStore.eventMessages(streamIdOf(entityId))?.map { eventClass.java.cast(it.payload) } ?: return null
-    val entity = events.fold(emptyEntity, { entity, event -> entity apply event })
-    return Pair(entity, Version(events.size.toLong()))
+    var eventNumber = -1
+    val entity = eventStore.iterateStreamEventsForward(streamIdOf(entityId), 0, 1024, false)
+        .asSequence()
+        .map {
+          val type = Class.forName(it.event.eventType)
+          eventNumber = Math.max(eventNumber, it.event.eventNumber)
+          objectMapper.readValue(it.event.data, type) as EVENT
+        }
+        .fold(emptyEntity, { entity, event -> entity apply event })
+
+    return Pair(entity, Version(eventNumber.toLong()))
   }
 
-  fun saveToStore(entityId: ID, version: Version, vararg additionalEvents: EVENT) {
-    eventStore.batchAppend(streamIdOf(entityId), version.value, additionalEvents.toList())
+  fun saveToStore(entityId: ID, version: Version, vararg additionalEvents: EVENT): CompletableFuture<Unit> {
+    return eventStore.appendToStream(streamIdOf(entityId), ExpectedVersion.of(version.value.toInt()), additionalEvents.map {
+      EventData.newBuilder()
+          .type(it.javaClass.name)
+          .jsonData(objectMapper.writeValueAsBytes(it))
+          .build()
+    }).thenApply { Unit }
   }
 
 }

@@ -13,9 +13,6 @@ class InMemorySheetRepository : SheetRepository {
       emptyEntity = Sheet()
   )
 
-  override fun exists(id: SheetId): Boolean
-      = helper.existsInMemory(id)
-
   override fun find(id: SheetId): Pair<Sheet, Version>?
       = helper.findByMemory(id)
 

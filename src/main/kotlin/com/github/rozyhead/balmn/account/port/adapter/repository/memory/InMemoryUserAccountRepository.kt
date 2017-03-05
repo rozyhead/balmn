@@ -13,8 +13,6 @@ class InMemoryUserAccountRepository : UserAccountRepository {
       emptyEntity = UserAccount()
   )
 
-  override fun exists(id: AccountId): Boolean = helper.existsInMemory(id)
-
   override fun find(id: AccountId): Pair<UserAccount, Version>?
       = helper.findByMemory(id)
 
