@@ -3,7 +3,6 @@ package com.github.rozyhead.balmn.common.port.adapter.repository.eventstore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.msemys.esjc.EventData
 import com.github.msemys.esjc.EventStore
-import com.github.msemys.esjc.ExpectedVersion
 import com.github.rozyhead.balmn.common.domain.model.DomainEntity
 import com.github.rozyhead.balmn.common.domain.model.DomainEvent
 import com.github.rozyhead.balmn.common.domain.model.Version
@@ -17,12 +16,13 @@ class EventStoreRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<
 ) {
 
   fun findByStore(entityId: ID): Pair<ENTITY, Version>? {
-    var eventNumber = -1
+    var eventNumber = -1L
     val entity = eventStore.iterateStreamEventsForward(streamIdOf(entityId), 0, 1024, false)
         .asSequence()
         .map {
           val type = Class.forName(it.event.eventType)
           eventNumber = Math.max(eventNumber, it.event.eventNumber)
+          @Suppress("UNCHECKED_CAST")
           objectMapper.readValue(it.event.data, type) as EVENT
         }
         .fold(emptyEntity, { entity, event -> entity apply event })
@@ -31,7 +31,7 @@ class EventStoreRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<
   }
 
   fun saveToStore(entityId: ID, version: Version, vararg additionalEvents: EVENT): CompletableFuture<Unit> {
-    return eventStore.appendToStream(streamIdOf(entityId), ExpectedVersion.of(version.value.toInt()), additionalEvents.map {
+    return eventStore.appendToStream(streamIdOf(entityId), version.value, additionalEvents.map {
       EventData.newBuilder()
           .type(it.javaClass.name)
           .jsonData(objectMapper.writeValueAsBytes(it))
