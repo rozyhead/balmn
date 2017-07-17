@@ -3,6 +3,7 @@ package com.github.rozyhead.balmn.common.port.adapter.repository.memory
 import com.github.rozyhead.balmn.common.domain.model.DomainEntity
 import com.github.rozyhead.balmn.common.domain.model.DomainEvent
 import com.github.rozyhead.balmn.common.domain.model.Version
+import java.util.concurrent.CompletableFuture
 
 class InMemoryRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<EVENT, ENTITY>, ID>(
     val emptyEntity: ENTITY
@@ -17,11 +18,13 @@ class InMemoryRepositoryHelper<EVENT : DomainEvent, out ENTITY : DomainEntity<EV
     return Pair(events.fold(emptyEntity, { a, b -> a apply b }), Version(events.size.toLong()))
   }
 
-  fun saveToMemory(entityId: ID, version: Version, vararg additionalEvents: EVENT) {
+  fun saveToMemory(entityId: ID, version: Version, vararg additionalEvents: EVENT): CompletableFuture<Unit> {
     val savedOldEvents = this.events.getOrElse(entityId, { emptyList() })
     require(version.value == savedOldEvents.size.toLong())
 
     this.events[entityId] = savedOldEvents + additionalEvents
+
+    return CompletableFuture.completedFuture(Unit)
   }
 
 }

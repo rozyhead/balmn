@@ -24,7 +24,6 @@ class UserServiceTest {
     val command = UserService.RegisterPasswordAuthenticationUserCommand(userName, plainPassword)
 
     val userId = sut.registerPasswordAuthenticationUser(command)
-    assertThat(userRepository.exists(userId)).isTrue()
 
     val (user) = userRepository.find(userId)!!
     assertThat(user.name).isEqualTo(userName)

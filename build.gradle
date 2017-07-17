@@ -6,6 +6,7 @@ buildscript {
     exposedVersion = '0.7.4'
     rxjavaVersion = '1.2.5'
     rxkotlinVersion = '0.60.0'
+    esjcVersion = '1.7.0'
   }
   repositories {
     mavenCentral()
@@ -49,6 +50,8 @@ dependencies {
 
   compile("io.reactivex:rxjava:${rxjavaVersion}")
   compile("io.reactivex:rxkotlin:${rxkotlinVersion}")
+
+  compile("com.github.msemys:esjc:${esjcVersion}")
 
   runtime('com.h2database:h2')
 }

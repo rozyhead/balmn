@@ -13,9 +13,6 @@ class InMemoryCardRepository : CardRepository {
       emptyEntity = Card()
   )
 
-  override fun exists(id: CardId): Boolean
-      = helper.existsInMemory(id)
-
   override fun find(id: CardId): Pair<Card, Version>?
       = helper.findByMemory(id)
 
