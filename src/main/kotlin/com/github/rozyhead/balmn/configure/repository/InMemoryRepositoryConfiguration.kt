@@ -1,7 +1,6 @@
 package com.github.rozyhead.balmn.configure.repository
 
 import com.github.rozyhead.balmn.account.port.adapter.repository.memory.InMemoryUserAccountRepository
-import com.github.rozyhead.balmn.authentication.port.adapter.repository.memory.InMemoryUserRepository
 import com.github.rozyhead.balmn.kanban.port.adapter.repository.memory.InMemoryBoardRepository
 import com.github.rozyhead.balmn.kanban.port.adapter.repository.memory.InMemoryCardRepository
 import com.github.rozyhead.balmn.kanban.port.adapter.repository.memory.InMemoryCommentRepository
@@ -18,9 +17,6 @@ class InMemoryRepositoryConfiguration {
 
   @Bean
   fun inMemoryCommentRepository() = InMemoryCommentRepository()
-
-  @Bean
-  fun inMemoryPasswordAuthenticationRepository() = InMemoryUserRepository()
 
   @Bean
   fun inMemorySheetRepository() = InMemorySheetRepository()

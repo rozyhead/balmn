@@ -1,6 +1,6 @@
-package com.github.rozyhead.balmn.authentication.domain.model.password
+package com.github.rozyhead.balmn.account.domain.model.authentication.password
 
-import com.github.rozyhead.balmn.authentication.domain.model.AuthenticationMethod
+import com.github.rozyhead.balmn.account.domain.model.authentication.AuthenticationMethod
 
 data class PasswordAuthentication(
     val encodedPassword: EncodedPassword
