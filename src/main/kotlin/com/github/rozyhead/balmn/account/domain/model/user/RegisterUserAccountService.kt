@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class RegisterUserAccountService(
-    val accountNameIndex: AccountNameIndex,
-    val userAccountRepository: UserAccountRepository
+    private val accountNameIndex: AccountNameIndex,
+    private val userAccountRepository: UserAccountRepository
 ) {
 
   @Throws(AccountOperationException::class)
