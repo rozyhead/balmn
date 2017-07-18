@@ -1,6 +1,6 @@
 package com.github.rozyhead.balmn.kanban.port.adapter.index.memory
 
-import com.github.rozyhead.balmn.kanban.application.index.BoardNameIndex
+import com.github.rozyhead.balmn.kanban.domain.model.board.BoardNameIndex
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardId
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardName
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwner
@@ -19,7 +19,7 @@ class InMemoryBoardNameIndex : BoardNameIndex {
     return index[Pair(boardOwner, boardName)]
   }
 
-  fun save(boardOwner: BoardOwner, boardName: BoardName, boardId: BoardId) {
+  override fun save(boardOwner: BoardOwner, boardName: BoardName, boardId: BoardId) {
     index += Pair(Pair(boardOwner, boardName), boardId)
   }
 

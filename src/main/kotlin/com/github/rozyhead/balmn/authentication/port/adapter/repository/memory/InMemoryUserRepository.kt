@@ -1,9 +1,9 @@
 package com.github.rozyhead.balmn.authentication.port.adapter.repository.memory
 
-import com.github.rozyhead.balmn.authentication.application.repository.UserRepository
 import com.github.rozyhead.balmn.authentication.domain.model.User
 import com.github.rozyhead.balmn.authentication.domain.model.UserEvent
 import com.github.rozyhead.balmn.authentication.domain.model.UserId
+import com.github.rozyhead.balmn.authentication.domain.model.UserRepository
 import com.github.rozyhead.balmn.common.domain.model.Version
 import com.github.rozyhead.balmn.common.port.adapter.repository.memory.InMemoryRepositoryHelper
 

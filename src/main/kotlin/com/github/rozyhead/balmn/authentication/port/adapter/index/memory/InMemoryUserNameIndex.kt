@@ -1,8 +1,8 @@
 package com.github.rozyhead.balmn.authentication.port.adapter.index.memory
 
-import com.github.rozyhead.balmn.authentication.application.index.UserNameIndex
 import com.github.rozyhead.balmn.authentication.domain.model.UserId
 import com.github.rozyhead.balmn.authentication.domain.model.UserName
+import com.github.rozyhead.balmn.authentication.domain.model.UserNameIndex
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,7 +18,7 @@ class InMemoryUserNameIndex : UserNameIndex {
     return map[userName]
   }
 
-  fun save(userName: UserName, userId: UserId) {
+  override fun save(userName: UserName, userId: UserId) {
     map[userName] = userId
   }
 

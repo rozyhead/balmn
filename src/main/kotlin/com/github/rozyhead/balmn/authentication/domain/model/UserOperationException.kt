@@ -1,6 +1,4 @@
-package com.github.rozyhead.balmn.authentication.application.exception
-
-import com.github.rozyhead.balmn.authentication.domain.model.UserName
+package com.github.rozyhead.balmn.authentication.domain.model
 
 sealed class UserOperationException(
     message: String? = null,

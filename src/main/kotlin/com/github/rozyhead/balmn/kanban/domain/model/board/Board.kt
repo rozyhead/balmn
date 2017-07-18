@@ -16,18 +16,6 @@ data class Board(
     }
   }
 
-  fun allowSheetAdditionByUser(boardOwnerService: BoardOwnerService, userId: UserId): Boolean {
-    return boardOwnerService.isMember(owner, userId)
-  }
-
-  fun allowCardAdditionByUser(boardOwnerService: BoardOwnerService, userId: UserId): Boolean {
-    return boardOwnerService.isMember(owner, userId)
-  }
-
-  fun allowCommentAdditionByUser(boardOwnerService: BoardOwnerService, userId: UserId): Boolean {
-    return boardOwnerService.isMember(owner, userId)
-  }
-
   fun addSheet(sheetName: SheetName, occurredBy: UserId): Pair<Sheet, SheetEvent> {
     return Sheet() and SheetAdded(id, SheetId.generate(), sheetName, occurredBy = occurredBy)
   }

@@ -1,4 +1,4 @@
-package com.github.rozyhead.balmn.kanban.application.exception
+package com.github.rozyhead.balmn.kanban.domain.model
 
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardName
 import com.github.rozyhead.balmn.kanban.domain.model.board.BoardOwner
@@ -34,7 +34,7 @@ sealed class BoardOperationException(
 
   companion object {
     fun boardOwnerNotFound(boardOwner: BoardOwner) = BoardOwnerNotFoundException(boardOwner)
-    fun boardOperationNotAllowed(boardOwner: BoardOwner, boardName: BoardName?) = BoardOperationNotAllowedException(boardOwner, boardName)
+    fun boardOperationNotAllowed(boardOwner: BoardOwner, boardName: BoardName? = null) = BoardOperationNotAllowedException(boardOwner, boardName)
     fun boardAlreadyExists(boardOwner: BoardOwner, boardName: BoardName) = BoardAlreadyExistsException(boardOwner, boardName)
     fun boardNotFound(boardOwner: BoardOwner, boardName: BoardName) = BoardNotFoundException(boardOwner, boardName)
     fun sheetNotFound(sheetId: SheetId) = SheetNotFoundException(sheetId)

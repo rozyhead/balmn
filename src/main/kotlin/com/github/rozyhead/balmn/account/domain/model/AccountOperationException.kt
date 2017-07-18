@@ -1,6 +1,4 @@
-package com.github.rozyhead.balmn.account.application.exception
-
-import com.github.rozyhead.balmn.account.domain.model.AccountName
+package com.github.rozyhead.balmn.account.domain.model
 
 sealed class AccountOperationException(message: String) : Exception(message) {
 

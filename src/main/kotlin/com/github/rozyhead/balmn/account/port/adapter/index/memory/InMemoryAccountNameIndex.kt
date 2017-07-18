@@ -1,8 +1,8 @@
 package com.github.rozyhead.balmn.account.port.adapter.index.memory
 
-import com.github.rozyhead.balmn.account.application.index.AccountNameIndex
 import com.github.rozyhead.balmn.account.domain.model.AccountId
 import com.github.rozyhead.balmn.account.domain.model.AccountName
+import com.github.rozyhead.balmn.account.domain.model.AccountNameIndex
 import com.github.rozyhead.balmn.account.domain.model.AccountType
 import org.springframework.stereotype.Component
 
@@ -19,7 +19,7 @@ class InMemoryAccountNameIndex : AccountNameIndex {
     return index[accountName]
   }
 
-  fun save(accountName: AccountName, accountId: AccountId, accountType: AccountType) {
+  override fun save(accountName: AccountName, accountId: AccountId, accountType: AccountType) {
     index[accountName] = Pair(accountId, accountType)
   }
 

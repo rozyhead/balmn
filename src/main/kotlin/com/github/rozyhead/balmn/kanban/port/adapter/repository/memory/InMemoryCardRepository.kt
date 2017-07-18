@@ -2,10 +2,10 @@ package com.github.rozyhead.balmn.kanban.port.adapter.repository.memory
 
 import com.github.rozyhead.balmn.common.domain.model.Version
 import com.github.rozyhead.balmn.common.port.adapter.repository.memory.InMemoryRepositoryHelper
-import com.github.rozyhead.balmn.kanban.application.repository.CardRepository
 import com.github.rozyhead.balmn.kanban.domain.model.card.Card
 import com.github.rozyhead.balmn.kanban.domain.model.card.CardEvent
 import com.github.rozyhead.balmn.kanban.domain.model.card.CardId
+import com.github.rozyhead.balmn.kanban.domain.model.card.CardRepository
 
 class InMemoryCardRepository : CardRepository {
 
