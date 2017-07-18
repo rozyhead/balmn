@@ -1,2 +1,0 @@
-balmn.repository.strategy=eventstore
-balmn.eventstore.strategy=jdbc
