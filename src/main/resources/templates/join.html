@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
   <head>
     <meta charset="UTF-8"/>
-    <title>Good Thymes Virtual Grocery</title>
+    <title>Signup | Balmn</title>
   </head>
 
   <body>
-    <form th:action="@{/accounts/_newUser}" method="post" th:object="${registerUserAccountForm}">
+    <form th:action="@{/join}" method="post" th:object="${joinForm}">
       <ul th:if="${#fields.hasGlobalErrors()}">
-        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Global error</li>
       </ul>
       <div>
-        <label for="input-accountName">Account name</label>
+        <label for="input-accountName" th:text="#{accountName}">Account name</label>
         <input type="text" id="input-accountName" th:field="*{accountName}"/>
         <span th:if="${#fields.hasErrors('accountName')}" th:errors="*{accountName}">Error</span>
       </div>
       <div>
-        <label for="input-password">Password</label>
+        <label for="input-password" th:text="#{password}">Password</label>
         <input type="password" id="input-password" th:field="*{password}"/>
         <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</span>
       </div>
       <div>
-        <label for="input-passwordConfirmation">Password confirmation</label>
+        <label for="input-passwordConfirmation" th:text="#{passwordConfirmation}">Password confirmation</label>
         <input type="password" id="input-passwordConfirmation" th:field="*{passwordConfirmation}"/>
         <span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}">Error</span>
+        <span th:if="${#fields.hasErrors('passwordConfirmationMatches')}" th:errors="*{passwordConfirmationMatches}">Error</span>
       </div>
       <div>
-        <button type="submit">Register</button>
+        <button type="submit" th:text="#{register}">Register</button>
       </div>
     </form>
   </body>
